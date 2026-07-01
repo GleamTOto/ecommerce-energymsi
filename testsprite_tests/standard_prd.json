@@ -1,10 +1,10 @@
 {
   "meta": {
-    "project": "BasicTechShop",
+    "project": "EnergyMSI",
     "date": "2025-12-30",
     "prepared_by": "Software Development Manager"
   },
-  "product_overview": "BasicTechShop is a web-based B2C e-commerce platform focused on computing products such as hardware, peripherals, and components. It offers users browsing, filtering, and purchasing capabilities, while providing administrators with tools to manage inventory, users, and orders.",
+  "product_overview": "EnergyMSI is a web-based B2C e-commerce platform focused on computing products such as hardware, peripherals, and components. It offers users browsing, filtering, and purchasing capabilities, while providing administrators with tools to manage inventory, users, and orders.",
   "core_goals": [
     "Provide a seamless and responsive e-commerce experience specializing in computing products.",
     "Implement robust user authentication and role-based access control for customers, moderators, and admins.",

@@ -138,9 +138,9 @@ async def run_test():
 
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        await expect(frame.locator('text=BasicTechShop').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=EnergyMSI').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Tu tienda de tecnologia de confianza. Los mejores productos de computacion a los mejores precios.').first).to_be_visible(timeout=30000)
-        await expect(frame.locator('text=Envio a Peru').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=Envio a Colombia').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Envio Confiable').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Devoluciones Faciles').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Compra Segura').first).to_be_visible(timeout=30000)
@@ -203,10 +203,10 @@ async def run_test():
         await expect(frame.locator('text=Devoluciones').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Garantia').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Preguntas Frecuentes').first).to_be_visible(timeout=30000)
-        await expect(frame.locator('text=Av. Tecnologia 123, Lima, Peru').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=Av. Tecnologia 123, Bogotá, Colombia').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=+51 999 888 777').first).to_be_visible(timeout=30000)
-        await expect(frame.locator('text=info@basictechshop.com').first).to_be_visible(timeout=30000)
-        await expect(frame.locator('text=© 2026 BasicTechShop. Todos los derechos reservados.').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=info@EnergyMSI.com').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=© 2026 EnergyMSI. Todos los derechos reservados.').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Terminos y Condiciones').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Politica de Privacidad').first).to_be_visible(timeout=30000)
         await expect(frame.locator('text=Cookies').first).to_be_visible(timeout=30000)

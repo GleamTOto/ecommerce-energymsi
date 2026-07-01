@@ -1,20 +1,26 @@
-"use client"
+"use client";
 
-import { Save } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Separator } from "@/components/ui/separator"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Save } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 export default function AdminSettingsPage() {
   return (
@@ -48,11 +54,15 @@ export default function AdminSettingsPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="storeName">Nombre de la tienda</Label>
-                  <Input id="storeName" defaultValue="BasicTechShop" />
+                  <Input id="storeName" defaultValue="EnergyMSI" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="storeEmail">Email de contacto</Label>
-                  <Input id="storeEmail" type="email" defaultValue="info@basictechshop.com" />
+                  <Input
+                    id="storeEmail"
+                    type="email"
+                    defaultValue="info@energyMSI.com"
+                  />
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -62,7 +72,10 @@ export default function AdminSettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="storeAddress">Direccion</Label>
-                  <Input id="storeAddress" defaultValue="Av. Tecnologia 123, Lima" />
+                  <Input
+                    id="storeAddress"
+                    defaultValue="Av. Tecnologia 123, Lima"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
@@ -91,9 +104,15 @@ export default function AdminSettingsPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="america-lima">America/Lima (GMT-5)</SelectItem>
-                      <SelectItem value="america-bogota">America/Bogota (GMT-5)</SelectItem>
-                      <SelectItem value="america-mexico">America/Mexico_City (GMT-6)</SelectItem>
+                      <SelectItem value="america-lima">
+                        America/Lima (GMT-5)
+                      </SelectItem>
+                      <SelectItem value="america-bogota">
+                        America/Bogota (GMT-5)
+                      </SelectItem>
+                      <SelectItem value="america-mexico">
+                        America/Mexico_City (GMT-6)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -160,9 +179,7 @@ export default function AdminSettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Envio</CardTitle>
-              <CardDescription>
-                Configura las opciones de envio
-              </CardDescription>
+              <CardDescription>Configura las opciones de envio</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
@@ -294,5 +311,5 @@ export default function AdminSettingsPage() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

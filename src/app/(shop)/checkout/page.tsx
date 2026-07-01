@@ -1,43 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { ChevronLeft, Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ShippingForm } from "@/components/checkout/ShippingForm"
-import { PaymentForm } from "@/components/checkout/PaymentForm"
-import { OrderSummary } from "@/components/checkout/OrderSummary"
-import { products } from "@/data/mock-products"
-import { CartItem } from "@/types"
+import { useState } from "react";
+import Link from "next/link";
+import { ChevronLeft, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { ShippingForm } from "@/components/checkout/ShippingForm";
+import { PaymentForm } from "@/components/checkout/PaymentForm";
+import { OrderSummary } from "@/components/checkout/OrderSummary";
+import { products } from "@/data/mock-products";
+import { CartItem } from "@/types";
 
 // Mock cart data
 const cartItems: CartItem[] = [
   { product: products[0], quantity: 1 },
   { product: products[1], quantity: 2 },
   { product: products[2], quantity: 1 },
-]
+];
 
 const steps = [
   { id: 1, name: "Envio" },
   { id: 2, name: "Pago" },
   { id: 3, name: "Confirmar" },
-]
+];
 
 export default function CheckoutPage() {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(1);
 
   const handleNext = () => {
     if (currentStep < 3) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
+      setCurrentStep(currentStep - 1);
     }
-  }
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -63,8 +63,8 @@ export default function CheckoutPage() {
                     currentStep > step.id
                       ? "border-primary bg-primary text-primary-foreground"
                       : currentStep === step.id
-                      ? "border-primary text-primary"
-                      : "border-muted-foreground/30 text-muted-foreground"
+                        ? "border-primary text-primary"
+                        : "border-muted-foreground/30 text-muted-foreground"
                   }`}
                 >
                   {currentStep > step.id ? (
@@ -75,7 +75,9 @@ export default function CheckoutPage() {
                 </div>
                 <span
                   className={`ml-2 hidden text-sm font-medium sm:block ${
-                    currentStep >= step.id ? "text-foreground" : "text-muted-foreground"
+                    currentStep >= step.id
+                      ? "text-foreground"
+                      : "text-muted-foreground"
                   }`}
                 >
                   {step.name}
@@ -109,10 +111,13 @@ export default function CheckoutPage() {
                 <div className="rounded-lg bg-muted/50 p-4">
                   <h3 className="font-medium">Direccion de Envio</h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Juan Perez<br />
-                    Av. Principal 123<br />
-                    Lima, Lima 15001<br />
-                    Peru
+                    Juan Perez
+                    <br />
+                    Av. Principal 123
+                    <br />
+                    Bogotá, Bogotá 15001
+                    <br />
+                    Colombia
                   </p>
                 </div>
 
@@ -155,5 +160,5 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

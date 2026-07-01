@@ -1,6 +1,14 @@
-import Link from "next/link"
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
+import Link from "next/link";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
   productos: [
@@ -29,7 +37,7 @@ const footerLinks = {
     { name: "Politica de Privacidad", href: "/privacy" },
     { name: "Cookies", href: "/cookies" },
   ],
-}
+};
 
 export function Footer() {
   return (
@@ -40,24 +48,39 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <span className="text-sm font-bold text-primary-foreground">BT</span>
+                <span className="text-sm font-bold text-primary-foreground">
+                  EM
+                </span>
               </div>
-              <span className="text-xl font-bold">BasicTechShop</span>
+              <span className="text-xl font-bold">EnergyMSI</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Tu tienda de tecnologia de confianza. Los mejores productos de computacion a los mejores precios.
+              Tu tienda de tecnologia de confianza. Los mejores productos de
+              computacion a los mejores precios.
             </p>
             <div className="mt-4 flex gap-3">
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 <Facebook className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 <Twitter className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 <Instagram className="h-5 w-5" />
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-foreground">
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 <Youtube className="h-5 w-5" />
               </Link>
             </div>
@@ -120,7 +143,7 @@ export function Footer() {
             <ul className="mt-4 space-y-3">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Av. Tecnologia 123, Lima, Peru</span>
+                <span>Av. Tecnologia 123, Bogotá, Colombia</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
@@ -128,7 +151,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 shrink-0" />
-                <span>info@basictechshop.com</span>
+                <span>info@energyMSI.com</span>
               </li>
             </ul>
           </div>
@@ -139,7 +162,8 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} BasicTechShop. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} EnergyMSI. Todos los derechos
+            reservados.
           </p>
           <div className="flex gap-4">
             {footerLinks.legal.map((link) => (
@@ -155,5 +179,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

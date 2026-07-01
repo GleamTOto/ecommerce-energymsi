@@ -75,7 +75,7 @@ async def run_test():
 
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        await expect(frame.locator('text=BasicTechShop').first).to_be_visible(timeout=30000)
+        await expect(frame.locator('text=EnergyMSI').first).to_be_visible(timeout=30000)
         await asyncio.sleep(5)
     
     finally:

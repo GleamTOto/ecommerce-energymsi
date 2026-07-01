@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "../src/generated/prisma/client/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Pool } from "pg"
 
@@ -310,8 +310,8 @@ async function main() {
   // Create Admin User
   const adminUser = await prisma.user.create({
     data: {
-      email: "admin@basictech.com",
-      password: "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu9lK", // password: admin123
+      email: "admin@energyMSI.com",
+      password: "$2b$10$xsSrc3i9rvBX.uLhXeaMteDUia8iKTnIgt8SoPwY9MFMopOux4G5.", // password: admin123
       name: "Admin User",
       phone: "+51 999 888 777",
       role: "ADMIN",
@@ -324,7 +324,7 @@ async function main() {
   const customerUser = await prisma.user.create({
     data: {
       email: "juan@email.com",
-      password: "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu9lK", // password: admin123
+      password: "$2b$10$xsSrc3i9rvBX.uLhXeaMteDUia8iKTnIgt8SoPwY9MFMopOux4G5.", // password: admin123
       name: "Juan Perez",
       phone: "+51 987 654 321",
       role: "CUSTOMER",

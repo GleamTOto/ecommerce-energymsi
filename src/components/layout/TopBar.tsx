@@ -1,4 +1,4 @@
-import { Truck, RotateCcw, ShieldCheck } from "lucide-react"
+import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
 
 export function TopBar() {
   return (
@@ -7,7 +7,7 @@ export function TopBar() {
         <div className="flex h-9 items-center justify-between text-xs">
           <div className="flex items-center gap-1">
             <span className="hidden sm:inline">Envio a</span>
-            <span className="font-semibold">Peru</span>
+            <span className="font-semibold">Colombia</span>
           </div>
           <div className="flex items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-1.5">
@@ -26,5 +26,5 @@ export function TopBar() {
         </div>
       </div>
     </div>
-  )
+  );
 }

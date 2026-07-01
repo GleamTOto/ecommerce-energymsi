@@ -1,9 +1,11 @@
-# Plan: BasicTechShop - Ecommerce de Productos de Computación
+# Plan: EnergyMSI - Ecommerce de Productos de Computación
 
 ## Configuración del Proyecto
-- **Nombre**: BasicTechShop
+
+- **Nombre**: EnergyMSI
 
 ## Stack Tecnológico
+
 - **Frontend**: Next.js 16 (App Router)
 - **Base de datos**: PostgreSQL (fase posterior)
 - **ORM**: Prisma

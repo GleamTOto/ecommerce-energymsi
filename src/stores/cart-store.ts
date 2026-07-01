@@ -78,7 +78,7 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: "basictech-cart",
+      name: "energyMSI-cart",
     }
   )
 )

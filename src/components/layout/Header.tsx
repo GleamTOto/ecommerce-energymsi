@@ -1,12 +1,21 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
-import { Search, ShoppingCart, Heart, User, LogOut, Settings, Package, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import {
+  Search,
+  ShoppingCart,
+  Heart,
+  User,
+  LogOut,
+  Settings,
+  Package,
+  ChevronDown,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,19 +23,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { ThemeToggle } from "./ThemeToggle"
-import { MobileNav } from "./MobileNav"
-import { useCartStore } from "@/stores/cart-store"
+} from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "./ThemeToggle";
+import { MobileNav } from "./MobileNav";
+import { useCartStore } from "@/stores/cart-store";
 
 export function Header() {
-  const [mounted, setMounted] = useState(false)
-  const itemCount = useCartStore((state) => state.getItemCount())
-  const { data: session, status } = useSession()
+  const [mounted, setMounted] = useState(false);
+  const itemCount = useCartStore((state) => state.getItemCount());
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -35,10 +44,12 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="text-sm font-bold text-primary-foreground">BT</span>
+              <span className="text-sm font-bold text-primary-foreground">
+                EM
+              </span>
             </div>
             <span className="hidden text-xl font-bold sm:inline-block">
-              BasicTechShop
+              EnergyMSI
             </span>
           </Link>
 
@@ -97,7 +108,10 @@ export function Header() {
                 {session ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="hidden h-9 gap-1 px-2 sm:flex">
+                      <Button
+                        variant="ghost"
+                        className="hidden h-9 gap-1 px-2 sm:flex"
+                      >
                         <User className="h-4 w-4" />
                         <span className="max-w-24 truncate text-sm">
                           {session.user?.name?.split(" ")[0]}
@@ -108,7 +122,9 @@ export function Header() {
                     <DropdownMenuContent align="end" className="w-56">
                       <DropdownMenuLabel>
                         <div className="flex flex-col">
-                          <span className="font-medium">{session.user?.name}</span>
+                          <span className="font-medium">
+                            {session.user?.name}
+                          </span>
                           <span className="text-xs text-muted-foreground">
                             {session.user?.email}
                           </span>
@@ -128,7 +144,10 @@ export function Header() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href="/profile/settings" className="cursor-pointer">
+                        <Link
+                          href="/profile/settings"
+                          className="cursor-pointer"
+                        >
                           <Settings className="mr-2 h-4 w-4" />
                           Configuración
                         </Link>
@@ -162,9 +181,7 @@ export function Header() {
                       </Button>
                     </Link>
                     <Link href="/register">
-                      <Button size="sm">
-                        Registrarse
-                      </Button>
+                      <Button size="sm">Registrarse</Button>
                     </Link>
                   </div>
                 )}
@@ -189,5 +206,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

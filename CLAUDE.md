@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BasicTechShop is an e-commerce application for computer products built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui. Currently in UI-only phase with mock data - backend integration (PostgreSQL/Prisma) planned for future.
+EnergyMSI is an e-commerce application for computer products built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and shadcn/ui. Currently in UI-only phase with mock data - backend integration (PostgreSQL/Prisma) planned for future.
 
 ### Component Organization
+
 ```
 src/components/
 ├── layout/      # Header, Footer, TopBar, MobileNav, ThemeToggle
@@ -21,12 +22,14 @@ src/components/
 ```
 
 ### Data Layer
+
 - `src/data/mock-products.ts` - Products, categories, brands
 - `src/data/mock-user.ts` - User profile, addresses, orders, favorites
 - `src/data/mock-admin.ts` - Admin stats, users, payments
 - `src/types/index.ts` - Core interfaces (Product, Category, CartItem, FilterState)
 
 ### Styling System
+
 - Tailwind CSS v4 with CSS variables in OKLCH color space
 - Dark/light themes via `next-themes` (class strategy)
 - Theme variables in `src/app/globals.css`
@@ -50,10 +53,9 @@ src/components/
 
 See `/docs/PLAN.md` for detailed implementation phases and roadmap.
 
-
 ## Rules
 
-- Al momento de crear datos nuevos no uses Modales, usa paginas dedicadas para los formularios 
+- Al momento de crear datos nuevos no uses Modales, usa paginas dedicadas para los formularios
 - no uses server actions, usa Route handlers
 - para manejo de estado global usa Zustand
 - para formularios usar react-hook-form y zod

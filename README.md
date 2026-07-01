@@ -1,10 +1,10 @@
-# BasicTechShop
+# EnergyMSI
 
 E-commerce de productos de computación construido con Next.js 16, TypeScript y Tailwind CSS.
 
 ## Descripción
 
-BasicTechShop es una tienda online especializada en hardware, periféricos y componentes de computación. Incluye:
+EnergyMSI es una tienda online especializada en hardware, periféricos y componentes de computación. Incluye:
 
 - **Tienda pública**: Catálogo con filtros, carrito y checkout
 - **Panel de usuario**: Perfil, historial de pedidos y direcciones
@@ -12,16 +12,16 @@ BasicTechShop es una tienda online especializada en hardware, periféricos y com
 
 ## Stack Tecnológico
 
-| Tecnología | Uso |
-|------------|-----|
-| Next.js 16 | Framework (App Router) |
-| TypeScript | Lenguaje |
-| Tailwind CSS v4 | Estilos |
-| shadcn/ui | Componentes UI |
-| Prisma | ORM |
-| PostgreSQL | Base de datos |
-| Zustand | Estado global |
-| NextAuth.js | Autenticación |
+| Tecnología      | Uso                    |
+| --------------- | ---------------------- |
+| Next.js 16      | Framework (App Router) |
+| TypeScript      | Lenguaje               |
+| Tailwind CSS v4 | Estilos                |
+| shadcn/ui       | Componentes UI         |
+| Prisma          | ORM                    |
+| PostgreSQL      | Base de datos          |
+| Zustand         | Estado global          |
+| NextAuth.js     | Autenticación          |
 
 ## Requisitos
 
@@ -34,7 +34,7 @@ BasicTechShop es una tienda online especializada en hardware, periféricos y com
 ```bash
 # Clonar repositorio
 git clone <repo-url>
-cd ecommerce-basictech
+cd ecommerce-energyMSI
 
 # Instalar dependencias
 npm install
@@ -64,12 +64,12 @@ npm run dev
 
 ## Scripts Disponibles
 
-| Script | Descripción |
-|--------|-------------|
-| `npm run dev` | Inicia servidor de desarrollo |
-| `npm run build` | Genera build de producción |
+| Script          | Descripción                   |
+| --------------- | ----------------------------- |
+| `npm run dev`   | Inicia servidor de desarrollo |
+| `npm run build` | Genera build de producción    |
 | `npm run start` | Inicia servidor de producción |
-| `npm run lint` | Ejecuta ESLint |
+| `npm run lint`  | Ejecuta ESLint                |
 
 ## Estructura del Proyecto
 

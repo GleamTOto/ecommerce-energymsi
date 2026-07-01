@@ -1,15 +1,27 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import Link from "next/link"
-import { DollarSign, ShoppingCart, Users, Package, ArrowUpRight } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-import { StatsCard } from "@/components/admin/StatsCard"
-import { useAdminStore } from "@/stores/admin-store"
+import { useEffect } from "react";
+import Link from "next/link";
+import {
+  DollarSign,
+  ShoppingCart,
+  Users,
+  Package,
+  ArrowUpRight,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { StatsCard } from "@/components/admin/StatsCard";
+import { useAdminStore } from "@/stores/admin-store";
 
 function DashboardSkeleton() {
   return (
@@ -71,7 +83,7 @@ function DashboardSkeleton() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 const statusLabels: Record<string, string> = {
@@ -80,17 +92,17 @@ const statusLabels: Record<string, string> = {
   processing: "Procesando",
   cancelled: "Cancelado",
   pending: "Pendiente",
-}
+};
 
 export default function AdminDashboard() {
-  const { stats, recentOrders, loading, fetchDashboard } = useAdminStore()
+  const { stats, recentOrders, loading, fetchDashboard } = useAdminStore();
 
   useEffect(() => {
-    fetchDashboard()
-  }, [fetchDashboard])
+    fetchDashboard();
+  }, [fetchDashboard]);
 
   if (loading && !stats) {
-    return <DashboardSkeleton />
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -99,7 +111,7 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground">
-          Bienvenido al panel de administracion de BasicTechShop
+          Bienvenido al panel de administracion de EnergyMSI
         </p>
       </div>
 
@@ -138,7 +150,9 @@ export default function AdminDashboard() {
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Pedidos Recientes</CardTitle>
-              <CardDescription>Los ultimos pedidos de tu tienda</CardDescription>
+              <CardDescription>
+                Los ultimos pedidos de tu tienda
+              </CardDescription>
             </div>
             <Button variant="outline" size="sm" asChild>
               <Link href="/admin/orders">
@@ -162,12 +176,17 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9">
                         <AvatarFallback>
-                          {order.customer.split(" ").map((n) => n[0]).join("")}
+                          {order.customer
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-sm font-medium">{order.customer}</p>
-                        <p className="text-xs text-muted-foreground">{order.orderNumber}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {order.orderNumber}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
@@ -176,10 +195,10 @@ export default function AdminDashboard() {
                           order.status === "delivered"
                             ? "default"
                             : order.status === "shipped"
-                            ? "secondary"
-                            : order.status === "cancelled"
-                            ? "destructive"
-                            : "outline"
+                              ? "secondary"
+                              : order.status === "cancelled"
+                                ? "destructive"
+                                : "outline"
                         }
                       >
                         {statusLabels[order.status] || order.status}
@@ -199,34 +218,46 @@ export default function AdminDashboard() {
         <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle>Resumen de Pedidos</CardTitle>
-            <CardDescription>Estado de los pedidos en tu tienda</CardDescription>
+            <CardDescription>
+              Estado de los pedidos en tu tienda
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">Pendientes</span>
-                <Badge variant="outline">{useAdminStore.getState().ordersByStatus?.pending || 0}</Badge>
+                <Badge variant="outline">
+                  {useAdminStore.getState().ordersByStatus?.pending || 0}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Procesando</span>
-                <Badge variant="secondary">{useAdminStore.getState().ordersByStatus?.processing || 0}</Badge>
+                <Badge variant="secondary">
+                  {useAdminStore.getState().ordersByStatus?.processing || 0}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Enviados</span>
-                <Badge variant="secondary">{useAdminStore.getState().ordersByStatus?.shipped || 0}</Badge>
+                <Badge variant="secondary">
+                  {useAdminStore.getState().ordersByStatus?.shipped || 0}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Entregados</span>
-                <Badge variant="default">{useAdminStore.getState().ordersByStatus?.delivered || 0}</Badge>
+                <Badge variant="default">
+                  {useAdminStore.getState().ordersByStatus?.delivered || 0}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Cancelados</span>
-                <Badge variant="destructive">{useAdminStore.getState().ordersByStatus?.cancelled || 0}</Badge>
+                <Badge variant="destructive">
+                  {useAdminStore.getState().ordersByStatus?.cancelled || 0}
+                </Badge>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }
