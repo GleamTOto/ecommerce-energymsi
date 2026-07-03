@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:seed": "npx tsx prisma/seed.ts"
+    "db:seed": "npx tsx prisma/seed.ts",
+    "setup": "npx prisma generate && npx prisma migrate dev && npm run db:seed"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

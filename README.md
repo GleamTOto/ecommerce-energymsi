@@ -26,32 +26,83 @@ EnergyMSI es una tienda online especializada en hardware, periféricos y compone
 ## Requisitos
 
 - Node.js 18+
-- PostgreSQL (para backend)
-- Docker (opcional)
+- Cuenta gratuita en [Neon](https://neon.tech/) (PostgreSQL en la cloud)
+- Docker (opcional, solo si prefieres base de datos local)
 
-## Instalación
+## Instalación Rápida
+
+### 1. Clonar e instalar dependencias
 
 ```bash
-# Clonar repositorio
 git clone <repo-url>
 cd ecommerce-energyMSI
-
-# Instalar dependencias
 npm install
+```
 
-# Configurar variables de entorno
+### 2. Configurar base de datos Neon (Recomendado)
+
+**Paso 1:** Crear cuenta gratuita en [neon.tech](https://neon.tech/)
+
+**Paso 2:** Crear un nuevo proyecto (dale un nombre como "energyMSI-dev")
+
+**Paso 3:** Copiar el connection string desde el dashboard de Neon
+
+**Paso 4:** Configurar variables de entorno:
+
+```bash
+# Copiar el archivo de ejemplo
 cp .env.example .env
-# Editar .env con tus credenciales
 
-# Iniciar base de datos con Docker (opcional)
+# Editar .env y pegar tu connection string de Neon
+# El formato es: postgresql://user:password@host/database?sslmode=require
+```
+
+**Paso 5:** Ejecutar migraciones y seed:
+
+```bash
+# Opción 1: Script de setup completo (recomendado)
+npm run setup
+
+# Opción 2: Comandos individuales
+npx prisma generate
+npx prisma migrate dev
+npm run db:seed
+```
+
+### 3. Iniciar el servidor
+
+```bash
+npm run dev
+```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+---
+
+### Alternativa: Base de datos local con Docker
+
+Si prefieres no usar Neon, puedes correr PostgreSQL localmente con Docker:
+
+```bash
+# Levantar la base de datos
 docker-compose up -d
 
-# Ejecutar migraciones
-npx prisma migrate dev
+# Configurar .env con credenciales locales
+# DATABASE_URL="postgresql://energyMSI:energyMSI123@localhost:5490/energyMSI_shop?schema=public"
 
-# Sembrar datos iniciales
-npx prisma db seed
+# Ejecutar migraciones y seed
+npx prisma migrate dev
+npm run db:seed
 ```
+
+## Usuarios de Prueba
+
+Después de ejecutar `npm run db:seed`, estos usuarios estarán disponibles:
+
+| Email              | Password | Rol      |
+| ------------------ | -------- | -------- |
+| admin@energyMSI.com | admin123 | ADMIN    |
+| juan@email.com     | admin123 | CUSTOMER |
 
 ## Desarrollo
 
@@ -64,12 +115,14 @@ npm run dev
 
 ## Scripts Disponibles
 
-| Script          | Descripción                   |
-| --------------- | ----------------------------- |
-| `npm run dev`   | Inicia servidor de desarrollo |
-| `npm run build` | Genera build de producción    |
-| `npm run start` | Inicia servidor de producción |
-| `npm run lint`  | Ejecuta ESLint                |
+| Script          | Descripción                                              |
+| --------------- | -------------------------------------------------------- |
+| `npm run setup` | Configura DB completa: generate + migrate + seed         |
+| `npm run dev`   | Inicia servidor de desarrollo                            |
+| `npm run build` | Genera build de producción                               |
+| `npm run start` | Inicia servidor de producción                            |
+| `npm run lint`  | Ejecuta ESLint                                           |
+| `npm run db:seed` | Siembra datos iniciales (productos, usuarios)          |
 
 ## Estructura del Proyecto
 
