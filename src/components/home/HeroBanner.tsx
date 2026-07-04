@@ -17,7 +17,7 @@ const slides = [
   {
     id: 1,
     badge: "Nuevo Lanzamiento",
-    title: "RTX Serie 40",
+    title: "RTX Serie 40",  
     subtitle: "Potencia Maxima",
     description: "Las tarjetas graficas mas potentes para gaming y creacion de contenido",
     cta: "Ver GPUs",
@@ -106,12 +106,12 @@ export function HeroBanner() {
                     {/* Visual Element */}
                     <div className="relative w-72 h-52 sm:w-96 sm:h-72 lg:w-[500px] lg:h-80">
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-3xl rounded-full" />
-                      <div className="relative h-full rounded-2xl overflow-hidden shadow-2xl">
+                      <div className="relative h-full overflow-hidden shadow-2xl">
                         <Image
                           src={slide.image}
                           alt={slide.title}
                           fill
-                          className="object-cover rounded-2xl"
+                          className="object-cover "
                         />
                       </div>
                     </div>
