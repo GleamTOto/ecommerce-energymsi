@@ -1,7 +1,7 @@
 import { HeroBanner } from "@/components/home/HeroBanner"
 import { CategoryGrid } from "@/components/home/CategoryGrid"
 import { FeaturedProducts } from "@/components/home/FeaturedProducts"
-import { BrandSection } from "@/components/home/BrandSection"
+import { SupplierSection } from "@/components/home/SupplierSection"
 
 export default function HomePage() {
   return (
@@ -9,7 +9,7 @@ export default function HomePage() {
       <HeroBanner />
       <CategoryGrid />
       <FeaturedProducts />
-      <BrandSection />
+      <SupplierSection />
     </>
   )
 }

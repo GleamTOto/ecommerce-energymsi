@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { categories } from "@/data/mock-products"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useProductsStore } from "@/stores/products-store"
 
 interface CategoryFilterProps {
   selectedCategories: string[]
@@ -16,6 +17,13 @@ export function CategoryFilter({
   onCategoriesChange,
 }: CategoryFilterProps) {
   const [isOpen, setIsOpen] = useState(true)
+  const { categories, fetchCategories } = useProductsStore()
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      fetchCategories()
+    }
+  }, [categories.length, fetchCategories])
 
   const handleCategoryToggle = (categorySlug: string) => {
     if (selectedCategories.includes(categorySlug)) {
@@ -41,24 +49,30 @@ export function CategoryFilter({
 
       {isOpen && (
         <div className="mt-2 space-y-2">
-          {categories.map((category) => (
-            <div key={category.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`category-${category.id}`}
-                checked={selectedCategories.includes(category.slug)}
-                onCheckedChange={() => handleCategoryToggle(category.slug)}
-              />
-              <Label
-                htmlFor={`category-${category.id}`}
-                className="flex flex-1 cursor-pointer items-center justify-between text-sm"
-              >
-                <span>{category.name}</span>
-                <span className="text-xs text-muted-foreground">
-                  {category.productCount}
-                </span>
-              </Label>
-            </div>
-          ))}
+          {categories.length === 0 ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-6 w-full" />
+            ))
+          ) : (
+            categories.map((category) => (
+              <div key={category.id} className="flex items-center space-x-2">
+                <Checkbox
+                  id={`category-${category.id}`}
+                  checked={selectedCategories.includes(category.slug)}
+                  onCheckedChange={() => handleCategoryToggle(category.slug)}
+                />
+                <Label
+                  htmlFor={`category-${category.id}`}
+                  className="flex flex-1 cursor-pointer items-center justify-between text-sm"
+                >
+                  <span>{category.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {category.productCount}
+                  </span>
+                </Label>
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>

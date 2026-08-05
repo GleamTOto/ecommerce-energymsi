@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChevronDown, ChevronUp, Search } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { suppliers } from "@/data/mock-products"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useProductsStore } from "@/stores/products-store"
 
 interface SupplierFilterProps {
   selectedSuppliers: string[]
@@ -15,6 +16,13 @@ interface SupplierFilterProps {
 export function SupplierFilter({ selectedSuppliers, onSuppliersChange }: SupplierFilterProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const { suppliers, fetchSuppliers } = useProductsStore()
+
+  useEffect(() => {
+    if (suppliers.length === 0) {
+      fetchSuppliers()
+    }
+  }, [suppliers.length, fetchSuppliers])
 
   const filteredSuppliers = suppliers.filter((supplier) =>
     supplier.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -56,30 +64,38 @@ export function SupplierFilter({ selectedSuppliers, onSuppliersChange }: Supplie
           </div>
 
           <div className="max-h-48 space-y-2 overflow-y-auto">
-            {filteredSuppliers.map((supplier) => (
-              <div key={supplier.id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`supplier-${supplier.id}`}
-                  checked={selectedSuppliers.includes(supplier.name)}
-                  onCheckedChange={() => handleSupplierToggle(supplier.name)}
-                />
-                <Label
-                  htmlFor={`supplier-${supplier.id}`}
-                  className="flex flex-1 cursor-pointer items-center justify-between text-sm"
-                >
-                  <span className="flex items-center gap-2">
-                    <span
-                      className="inline-block h-3 w-3 rounded-full"
-                      style={{ backgroundColor: supplier.color }}
-                    />
-                    {supplier.name}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {supplier.productCount}
-                  </span>
-                </Label>
-              </div>
-            ))}
+            {suppliers.length === 0 ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-6 w-full" />
+              ))
+            ) : (
+              filteredSuppliers.map((supplier) => (
+                <div key={supplier.id} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`supplier-${supplier.id}`}
+                    checked={selectedSuppliers.includes(supplier.name)}
+                    onCheckedChange={() => handleSupplierToggle(supplier.name)}
+                  />
+                  <Label
+                    htmlFor={`supplier-${supplier.id}`}
+                    className="flex flex-1 cursor-pointer items-center justify-between text-sm"
+                  >
+                    <span className="flex items-center gap-2">
+                      {supplier.color && (
+                        <span
+                          className="inline-block h-3 w-3 rounded-full"
+                          style={{ backgroundColor: supplier.color }}
+                        />
+                      )}
+                      {supplier.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {supplier.productCount}
+                    </span>
+                  </Label>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
