@@ -41,9 +41,9 @@
 
 ## Phase 5: Cleanup (PR 5)
 
-- [ ] 5.1 Update FilterSidebar with supplier filter and COP price range
-- [ ] 5.2 Update products-store (brands → suppliers, priceRange defaults)
-- [ ] 5.3 Rename BrandSection → SupplierSection
-- [ ] 5.4 Add cart localStorage versioning + migration
-- [ ] 5.5 Remove all direct imports from mock-products in components
-- [ ] 5.6 Final build verification (npm run build)
+- [x] 5.1 Update FilterSidebar with supplier filter and COP price range
+- [x] 5.2 Update products-store (brands → suppliers, priceRange defaults)
+- [x] 5.3 Rename BrandSection → SupplierSection
+- [x] 5.4 Add cart localStorage versioning + migration
+- [x] 5.5 Remove all direct imports from mock-products in components
+- [x] 5.6 Final build verification (npm run build)
