@@ -8,12 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { ShippingForm } from "@/components/checkout/ShippingForm";
 import { PaymentForm } from "@/components/checkout/PaymentForm";
 import { OrderSummary } from "@/components/checkout/OrderSummary";
-import { products } from "@/data/mock-products"
-import type { CartItem, Product } from "@/types"
-
-// Mock cart data - use first 3 products that exist
-const cartProducts = products.slice(0, 3)
-const cartItems: CartItem[] = cartProducts.map((p) => ({ product: p, quantity: 1 }))
+import { useCartStore } from "@/stores/cart-store"
 
 const steps = [
   { id: 1, name: "Envio" },
@@ -23,6 +18,7 @@ const steps = [
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1);
+  const items = useCartStore((state) => state.items);
 
   const handleNext = () => {
     if (currentStep < 3) {
@@ -152,7 +148,7 @@ export default function CheckoutPage() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="sticky top-24">
-            <OrderSummary items={cartItems} />
+            <OrderSummary items={items} />
           </div>
         </div>
       </div>

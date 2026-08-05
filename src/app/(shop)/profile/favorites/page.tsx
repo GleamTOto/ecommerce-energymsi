@@ -4,10 +4,11 @@ import Link from "next/link"
 import { Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ProductCard } from "@/components/products/ProductCard"
-import { favorites } from "@/data/mock-user"
 
 export default function FavoritesPage() {
+  // TODO: Implement favorites store with API integration
+  const favorites: unknown[] = []
+
   return (
     <div className="space-y-6">
       <div>
@@ -35,11 +36,6 @@ export default function FavoritesPage() {
           <p className="text-sm text-muted-foreground">
             {favorites.length} {favorites.length === 1 ? "producto" : "productos"} guardados
           </p>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {favorites.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
         </>
       )}
     </div>

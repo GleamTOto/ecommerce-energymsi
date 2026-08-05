@@ -2,12 +2,12 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { User, Package, MapPin, Heart, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { userProfile } from "@/data/mock-user"
 
 const navigation = [
   { name: "Mi Perfil", href: "/profile", icon: User },
@@ -19,6 +19,18 @@ const navigation = [
 
 export function ProfileSidebar() {
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const userName = session?.user?.name || "Usuario"
+  const userEmail = session?.user?.email || ""
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
+  }
 
   return (
     <aside className="space-y-6">
@@ -26,12 +38,12 @@ export function ProfileSidebar() {
       <div className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarFallback className="text-lg">
-            {userProfile.name.split(" ").map((n) => n[0]).join("")}
+            {getInitials(userName)}
           </AvatarFallback>
         </Avatar>
         <div>
-          <h2 className="font-semibold">{userProfile.name}</h2>
-          <p className="text-sm text-muted-foreground">{userProfile.email}</p>
+          <h2 className="font-semibold">{userName}</h2>
+          <p className="text-sm text-muted-foreground">{userEmail}</p>
         </div>
       </div>
 
