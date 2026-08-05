@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { ProductImage } from "@/components/products/ProductImage"
 
 interface ProductGalleryProps {
   images: string[]
@@ -12,15 +12,15 @@ interface ProductGalleryProps {
 export function ProductGallery({ images, productName }: ProductGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
+  const currentImage = images[selectedIndex]
+
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
       <div className="relative aspect-square overflow-hidden rounded-lg bg-muted">
-        <Image
-          src={images[selectedIndex]}
+        <ProductImage
+          src={currentImage}
           alt={productName}
-          fill
-          className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
         />
@@ -40,11 +40,9 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                   : "border-transparent hover:border-muted-foreground/50"
               )}
             >
-              <Image
+              <ProductImage
                 src={image}
                 alt={`${productName} - ${index + 1}`}
-                fill
-                className="object-cover"
                 sizes="64px"
               />
             </button>
