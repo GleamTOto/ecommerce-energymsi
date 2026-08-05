@@ -12,29 +12,29 @@ import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
   productos: [
-    { name: "Computadoras", href: "/products?category=computadoras" },
-    { name: "Monitores", href: "/products?category=monitores" },
-    { name: "Teclados", href: "/products?category=teclados" },
-    { name: "Mouse", href: "/products?category=mouse" },
-    { name: "Audifonos", href: "/products?category=audifonos" },
-    { name: "Componentes", href: "/products?category=componentes" },
+    { name: "Baterías", href: "/products?category=baterias" },
+    { name: "Baterías para UPS", href: "/products?category=baterias-para-ups" },
+    { name: "Movilidad Eléctrica", href: "/products?category=movilidad-electrica" },
+    { name: "Inversores", href: "/products?category=inversores" },
+    { name: "Multímetros", href: "/products?category=multimetros" },
+    { name: "UPS y Protección", href: "/products?category=ups-y-sistemas-de-proteccion" },
   ],
   empresa: [
     { name: "Sobre Nosotros", href: "/about" },
     { name: "Contacto", href: "/contact" },
     { name: "Blog", href: "/blog" },
-    { name: "Trabaja con Nosotros", href: "/careers" },
+    { name: "Distribuidores", href: "/distributors" },
   ],
   ayuda: [
     { name: "Centro de Ayuda", href: "/help" },
-    { name: "Envios y Entregas", href: "/shipping" },
+    { name: "Envíos y Entregas", href: "/shipping" },
     { name: "Devoluciones", href: "/returns" },
-    { name: "Garantia", href: "/warranty" },
+    { name: "Garantía", href: "/warranty" },
     { name: "Preguntas Frecuentes", href: "/faq" },
   ],
   legal: [
-    { name: "Terminos y Condiciones", href: "/terms" },
-    { name: "Politica de Privacidad", href: "/privacy" },
+    { name: "Términos y Condiciones", href: "/terms" },
+    { name: "Política de Privacidad", href: "/privacy" },
     { name: "Cookies", href: "/cookies" },
   ],
 };
@@ -55,8 +55,7 @@ export function Footer() {
               <span className="text-xl font-bold">EnergyMSI</span>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Tu tienda de tecnologia de confianza. Los mejores productos de
-              computacion a los mejores precios.
+              Especialistas en soluciones de energía y baterías. Proveemos baterías de alta calidad para UPS, movilidad eléctrica, herramientas y más.
             </p>
             <div className="mt-4 flex gap-3">
               <Link
@@ -143,7 +142,7 @@ export function Footer() {
             <ul className="mt-4 space-y-3">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Av. Tecnologia 123, Bogotá, Colombia</span>
+                <span>Bogotá, Colombia</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
