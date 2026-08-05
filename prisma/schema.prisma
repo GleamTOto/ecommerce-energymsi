@@ -39,6 +39,12 @@ enum PaymentMethod {
   CASH_ON_DELIVERY
 }
 
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  OUT_OF_STOCK
+}
+
 // ==================== MODELS ====================
 
 model User {
@@ -60,58 +66,68 @@ model User {
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  icon      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  icon        String?
+  color       String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   products Product[]
 
   @@map("categories")
 }
 
-model Brand {
-  id        String   @id @default(cuid())
-  name      String
-  slug      String   @unique
-  logo      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Supplier {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  color       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   products Product[]
 
-  @@map("brands")
+  @@map("suppliers")
 }
 
 model Product {
-  id           String   @id @default(cuid())
+  id           String        @id @default(cuid())
   name         String
-  slug         String   @unique
+  slug         String        @unique
+  sku          String        @unique
   description  String?
-  price        Decimal  @db.Decimal(10, 2)
-  comparePrice Decimal? @db.Decimal(10, 2)
-  stock        Int      @default(0)
+  price        Decimal       @db.Decimal(12, 2)
+  comparePrice Decimal?      @db.Decimal(12, 2)
+  cost         Decimal?      @db.Decimal(12, 2)
+  margin       Decimal?      @db.Decimal(5, 2)
+  unit         String        @default("UNIDAD")
+  minStock     Int           @default(0)
+  status       ProductStatus @default(ACTIVE)
+  stock        Int           @default(0)
   images       String[]
   specs        Json?
-  isNew        Boolean  @default(false)
-  isFeatured   Boolean  @default(false)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  isNew        Boolean       @default(false)
+  isFeatured   Boolean       @default(false)
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
-  brandId String
-  brand   Brand @relation(fields: [brandId], references: [id])
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
 
   orderItems OrderItem[]
 
   @@index([categoryId])
-  @@index([brandId])
+  @@index([supplierId])
   @@index([slug])
+  @@index([sku])
   @@map("products")
 }
 
@@ -141,9 +157,9 @@ model Order {
   id              String      @id @default(cuid())
   orderNumber     String      @unique
   status          OrderStatus @default(PENDING)
-  subtotal        Decimal     @db.Decimal(10, 2)
-  shipping        Decimal     @db.Decimal(10, 2)
-  total           Decimal     @db.Decimal(10, 2)
+  subtotal        Decimal     @db.Decimal(12, 2)
+  shipping        Decimal     @db.Decimal(12, 2)
+  total           Decimal     @db.Decimal(12, 2)
   paymentMethod   String
   stripeSessionId String?
   notes           String?
@@ -166,9 +182,9 @@ model Order {
 model OrderItem {
   id       String  @id @default(cuid())
   name     String
-  price    Decimal @db.Decimal(10, 2)
+  price    Decimal @db.Decimal(12, 2)
   quantity Int
-  total    Decimal @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(12, 2)
 
   orderId String
   order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
