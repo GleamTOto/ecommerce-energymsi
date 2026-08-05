@@ -1,5 +1,6 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
+import { toast } from "sonner"
 import type { Product, CartItem } from "@/types"
 
 interface CartState {
@@ -79,6 +80,31 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "energyMSI-cart",
+      storage: createJSONStorage(() => localStorage),
+      version: 2,
+      migrate: (persistedState: unknown) => {
+        const state = persistedState as { items?: CartItem[] } | undefined
+        if (!state?.items || state.items.length === 0) {
+          return { items: [] }
+        }
+
+        // Check if items have the new Product shape (sku + supplier fields)
+        const firstItem = state.items[0]
+        const isNewShape =
+          firstItem.product &&
+          "sku" in firstItem.product &&
+          "supplier" in firstItem.product
+
+        if (!isNewShape) {
+          // Old cart shape detected — clear and notify
+          toast.info(
+            "Tu carrito fue actualizado. Por favor, agrega los productos nuevamente."
+          )
+          return { items: [] }
+        }
+
+        return { items: state.items }
+      },
     }
   )
 )
