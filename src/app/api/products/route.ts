@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     // Query params
     const category = searchParams.get("category")
-    const brand = searchParams.get("brand")
+    const supplier = searchParams.get("supplier")
     const minPrice = searchParams.get("minPrice")
     const maxPrice = searchParams.get("maxPrice")
     const sortBy = searchParams.get("sortBy") || "newest"
@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
       where.category = { slug: category }
     }
 
-    if (brand) {
-      where.brand = { slug: brand }
+    if (supplier) {
+      where.supplier = { slug: supplier }
     }
 
     if (minPrice || maxPrice) {
@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
       where.OR = [
         { name: { contains: search, mode: "insensitive" } },
         { description: { contains: search, mode: "insensitive" } },
+        { sku: { contains: search, mode: "insensitive" } },
       ]
     }
 
@@ -74,7 +75,7 @@ export async function GET(request: NextRequest) {
       orderBy,
       include: {
         category: true,
-        brand: true,
+        supplier: true,
       },
       take: limit ? Number(limit) : undefined,
       skip: offset ? Number(offset) : undefined,
@@ -105,20 +106,26 @@ export async function POST(request: NextRequest) {
       data: {
         name: body.name,
         slug: body.slug,
+        sku: body.sku,
         description: body.description,
         price: body.price,
         comparePrice: body.comparePrice,
+        cost: body.cost,
+        margin: body.margin,
+        unit: body.unit || "UNIDAD",
+        minStock: body.minStock || 0,
+        status: body.status || "ACTIVE",
         stock: body.stock || 0,
         images: body.images || [],
         specs: body.specs || {},
         isNew: body.isNew || false,
         isFeatured: body.isFeatured || false,
         categoryId: body.categoryId,
-        brandId: body.brandId,
+        supplierId: body.supplierId,
       },
       include: {
         category: true,
-        brand: true,
+        supplier: true,
       },
     })
 

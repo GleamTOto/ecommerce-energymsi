@@ -1,10 +1,10 @@
 import { create } from "zustand"
-import type { Product, Category, Brand, FilterState } from "@/types"
+import type { Product, Category, Supplier, FilterState } from "@/types"
 
 interface ProductsState {
   products: Product[]
   categories: Category[]
-  brands: Brand[]
+  suppliers: Supplier[]
   featuredProducts: Product[]
   filters: FilterState
   loading: boolean
@@ -14,22 +14,22 @@ interface ProductsState {
   fetchProducts: (filters?: Partial<FilterState>) => Promise<void>
   fetchFeaturedProducts: () => Promise<void>
   fetchCategories: () => Promise<void>
-  fetchBrands: () => Promise<void>
+  fetchSuppliers: () => Promise<void>
   setFilters: (filters: Partial<FilterState>) => void
   resetFilters: () => void
 }
 
 const defaultFilters: FilterState = {
   categories: [],
-  brands: [],
-  priceRange: [0, 10000],
+  suppliers: [],
+  priceRange: [0, 5000000],
   sortBy: "newest",
 }
 
 export const useProductsStore = create<ProductsState>((set, get) => ({
   products: [],
   categories: [],
-  brands: [],
+  suppliers: [],
   featuredProducts: [],
   filters: defaultFilters,
   loading: false,
@@ -44,13 +44,13 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       if (filters.categories.length === 1) {
         params.set("category", filters.categories[0])
       }
-      if (filters.brands.length === 1) {
-        params.set("brand", filters.brands[0])
+      if (filters.suppliers.length === 1) {
+        params.set("supplier", filters.suppliers[0])
       }
       if (filters.priceRange[0] > 0) {
         params.set("minPrice", filters.priceRange[0].toString())
       }
-      if (filters.priceRange[1] < 10000) {
+      if (filters.priceRange[1] < 5000000) {
         params.set("maxPrice", filters.priceRange[1].toString())
       }
       if (filters.sortBy) {
@@ -91,15 +91,15 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
     }
   },
 
-  fetchBrands: async () => {
+  fetchSuppliers: async () => {
     try {
-      const response = await fetch("/api/brands")
-      if (!response.ok) throw new Error("Failed to fetch brands")
+      const response = await fetch("/api/suppliers")
+      if (!response.ok) throw new Error("Failed to fetch suppliers")
 
-      const brands = await response.json()
-      set({ brands })
+      const suppliers = await response.json()
+      set({ suppliers })
     } catch (error) {
-      console.error("Error fetching brands:", error)
+      console.error("Error fetching suppliers:", error)
     }
   },
 

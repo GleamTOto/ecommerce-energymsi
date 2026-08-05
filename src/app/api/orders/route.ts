@@ -42,7 +42,7 @@ export async function GET() {
       items: order.items.map((item) => ({
         productId: item.productId,
         name: item.name,
-        brand: item.product.id, // Would need to join with brand
+        supplier: item.product.id, // Would need to join with supplier
         price: Number(item.price),
         quantity: item.quantity,
         image: item.product.images[0] || "",

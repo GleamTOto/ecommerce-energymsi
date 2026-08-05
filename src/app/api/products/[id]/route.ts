@@ -19,7 +19,7 @@ export async function GET(
       },
       include: {
         category: true,
-        brand: true,
+        supplier: true,
       },
     })
 
@@ -53,9 +53,15 @@ export async function PUT(
       data: {
         name: body.name,
         slug: body.slug,
+        sku: body.sku,
         description: body.description,
         price: body.price,
         comparePrice: body.comparePrice,
+        cost: body.cost,
+        margin: body.margin,
+        unit: body.unit,
+        minStock: body.minStock,
+        status: body.status,
         stock: body.stock,
         images: body.images,
         specs: body.specs,
@@ -63,11 +69,11 @@ export async function PUT(
         isFeatured: body.isFeatured,
         isActive: body.isActive,
         categoryId: body.categoryId,
-        brandId: body.brandId,
+        supplierId: body.supplierId,
       },
       include: {
         category: true,
-        brand: true,
+        supplier: true,
       },
     })
 

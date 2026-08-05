@@ -24,7 +24,7 @@ export interface Address {
 export interface OrderItem {
   productId: string
   name: string
-  brand: string
+  supplier: string
   price: number
   quantity: number
   image: string
@@ -79,15 +79,15 @@ export const orders: Order[] = [
     id: "ORD-2024-001",
     items: [
       {
-        productId: "1",
-        name: "ROG Strix GeForce RTX 4080",
-        brand: "ASUS",
-        price: 1299.99,
+        productId: products[0]?.id || "1",
+        name: products[0]?.name || "Bateria Netion 12v 1.2ah",
+        supplier: products[0]?.supplier || "Netion",
+        price: products[0]?.price || 30000,
         quantity: 1,
-        image: products[0].images[0],
+        image: products[0]?.images?.[0] || "",
       },
     ],
-    total: 1299.99,
+    total: products[0]?.price || 30000,
     status: "delivered",
     paymentMethod: "Tarjeta •••• 3456",
     shippingAddress: "Av. Principal 123, Lima",
@@ -98,23 +98,23 @@ export const orders: Order[] = [
     id: "ORD-2024-002",
     items: [
       {
-        productId: "2",
-        name: "G Pro X Superlight 2",
-        brand: "Logitech",
-        price: 159.99,
+        productId: products[1]?.id || "2",
+        name: products[1]?.name || "Bateria Netion 12v 2ah",
+        supplier: products[1]?.supplier || "Netion",
+        price: products[1]?.price || 40000,
         quantity: 1,
-        image: products[1].images[0],
+        image: products[1]?.images?.[0] || "",
       },
       {
-        productId: "3",
-        name: "K100 RGB Mechanical",
-        brand: "Corsair",
-        price: 229.99,
+        productId: products[2]?.id || "3",
+        name: products[2]?.name || "Bateria Netion 12v 2.3ah",
+        supplier: products[2]?.supplier || "Netion",
+        price: products[2]?.price || 45000,
         quantity: 1,
-        image: products[2].images[0],
+        image: products[2]?.images?.[0] || "",
       },
     ],
-    total: 389.98,
+    total: (products[1]?.price || 40000) + (products[2]?.price || 45000),
     status: "shipped",
     paymentMethod: "Yape",
     shippingAddress: "Jr. Comercio 456, Miraflores",
@@ -125,15 +125,15 @@ export const orders: Order[] = [
     id: "ORD-2024-003",
     items: [
       {
-        productId: "5",
-        name: "Cloud III Wireless",
-        brand: "HyperX",
-        price: 169.99,
+        productId: products[4]?.id || "5",
+        name: products[4]?.name || "Bateria Netion 12v 4ah",
+        supplier: products[4]?.supplier || "Netion",
+        price: products[4]?.price || 40000,
         quantity: 2,
-        image: products[4].images[0],
+        image: products[4]?.images?.[0] || "",
       },
     ],
-    total: 339.98,
+    total: (products[4]?.price || 40000) * 2,
     status: "processing",
     paymentMethod: "Transferencia BCP",
     shippingAddress: "Av. Principal 123, Lima",
@@ -144,15 +144,15 @@ export const orders: Order[] = [
     id: "ORD-2024-004",
     items: [
       {
-        productId: "6",
-        name: "970 EVO Plus 2TB",
-        brand: "Samsung",
-        price: 189.99,
+        productId: products[5]?.id || "6",
+        name: products[5]?.name || "Bateria Netion 12v 5ah",
+        supplier: products[5]?.supplier || "Netion",
+        price: products[5]?.price || 45000,
         quantity: 1,
-        image: products[5].images[0],
+        image: products[5]?.images?.[0] || "",
       },
     ],
-    total: 189.99,
+    total: products[5]?.price || 45000,
     status: "cancelled",
     paymentMethod: "Tarjeta •••• 7890",
     shippingAddress: "Av. Principal 123, Lima",
@@ -161,4 +161,4 @@ export const orders: Order[] = [
   },
 ]
 
-export const favorites = [products[0], products[1], products[6], products[9]]
+export const favorites = [products[0], products[1], products[6], products[9]].filter(Boolean)

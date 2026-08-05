@@ -1,20 +1,20 @@
-import type { Product, Category, Brand } from "@/types"
+import type { Product, Category, Supplier } from "@/types"
 import type {
   Product as PrismaProduct,
   Category as PrismaCategory,
-  Brand as PrismaBrand,
+  Supplier as PrismaSupplier,
 } from "@/generated/prisma/client/client"
 
 type ProductWithRelations = PrismaProduct & {
   category: PrismaCategory
-  brand: PrismaBrand
+  supplier: PrismaSupplier
 }
 
 type CategoryWithCount = PrismaCategory & {
   _count?: { products: number }
 }
 
-type BrandWithCount = PrismaBrand & {
+type SupplierWithCount = PrismaSupplier & {
   _count?: { products: number }
 }
 
@@ -23,11 +23,17 @@ export function transformProduct(product: ProductWithRelations): Product {
     id: product.id,
     name: product.name,
     slug: product.slug,
-    brand: product.brand.name,
+    sku: product.sku,
+    supplier: product.supplier.name,
     category: product.category.slug,
     price: Number(product.price),
-    originalPrice: product.comparePrice ? Number(product.comparePrice) : undefined,
-    images: product.images,
+    comparePrice: product.comparePrice ? Number(product.comparePrice) : undefined,
+    cost: product.cost ? Number(product.cost) : 0,
+    margin: product.margin ? Number(product.margin) : 0,
+    unit: product.unit,
+    minStock: product.minStock,
+    status: product.status as "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK",
+    images: product.images.length > 0 ? product.images : undefined,
     description: product.description || "",
     specs: (product.specs as Record<string, string>) || {},
     stock: product.stock,
@@ -43,15 +49,19 @@ export function transformCategory(category: CategoryWithCount): Category {
     name: category.name,
     slug: category.slug,
     icon: category.icon || "Package",
+    color: category.color || undefined,
+    description: category.description || undefined,
     productCount: category._count?.products || 0,
   }
 }
 
-export function transformBrand(brand: BrandWithCount): Brand {
+export function transformSupplier(supplier: SupplierWithCount): Supplier {
   return {
-    id: brand.id,
-    name: brand.name,
-    logo: brand.logo || undefined,
-    productCount: brand._count?.products || 0,
+    id: supplier.id,
+    name: supplier.name,
+    slug: supplier.slug,
+    description: supplier.description || undefined,
+    color: supplier.color || undefined,
+    productCount: supplier._count?.products || 0,
   }
 }
