@@ -143,12 +143,12 @@ export function Footer() {
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
                 <Link 
-                  href="https://maps.google.com/?q=EnergyMSI+Bogotá+Colombia" 
+                  href="https://www.google.com/maps/place/Tundama-Complejo+Electr%C3%B3nico+y+Comercial/@4.6076841,-74.0747663,17z/data=!3m1!4b1!4m6!3m5!1s0x8e3f999f412f1011:0x24aabd67af375f3e!8m2!3d4.6076841!4d-74.0721914!16s%2Fg%2F11f3r0ywr1" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-foreground transition-colors"
                 >
-                  Bogotá, Colombia
+                  Tundama - Complejo Electrónico y Comercial, Bogotá
                 </Link>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
