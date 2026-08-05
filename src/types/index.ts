@@ -4,7 +4,7 @@ export interface Product {
   id: string
   name: string
   slug: string
-  sku: string
+  sku?: string
   description: string
   price: number
   comparePrice?: number

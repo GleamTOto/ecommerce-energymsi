@@ -30,12 +30,11 @@ UPDATE "products" SET "supplierId" = "brandId";
 ALTER TABLE "products" DROP CONSTRAINT IF EXISTS "products_brandId_fkey";
 ALTER TABLE "products" DROP COLUMN "brandId";
 
--- Set sku as required and unique (after backfilling)
-ALTER TABLE "products" ALTER COLUMN "sku" SET NOT NULL;
-CREATE UNIQUE INDEX IF NOT EXISTS "products_sku_key" ON "products"("sku");
+-- Create unique index on sku (nullable, only for non-null values)
+CREATE UNIQUE INDEX IF NOT EXISTS "products_sku_key" ON "products"("sku") WHERE "sku" IS NOT NULL;
 
--- Add supplier relation
-ALTER TABLE "products" ADD CONSTRAINT "products_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+-- Add supplier relation (nullable)
+ALTER TABLE "products" ADD CONSTRAINT "products_supplierId_fkey" FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- Create indexes
 CREATE INDEX IF NOT EXISTS "products_supplierId_idx" ON "products"("supplierId");

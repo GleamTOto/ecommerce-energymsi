@@ -7,7 +7,7 @@ import type {
 
 type ProductWithRelations = PrismaProduct & {
   category: PrismaCategory
-  supplier: PrismaSupplier
+  supplier: PrismaSupplier | null
 }
 
 type CategoryWithCount = PrismaCategory & {
@@ -23,8 +23,8 @@ export function transformProduct(product: ProductWithRelations): Product {
     id: product.id,
     name: product.name,
     slug: product.slug,
-    sku: product.sku,
-    supplier: product.supplier.name,
+    sku: product.sku || undefined,
+    supplier: product.supplier?.name || "Sin proveedor",
     category: product.category.slug,
     price: Number(product.price),
     comparePrice: product.comparePrice ? Number(product.comparePrice) : undefined,
