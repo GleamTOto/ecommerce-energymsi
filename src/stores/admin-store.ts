@@ -1,4 +1,5 @@
 import { create } from "zustand"
+import { toast } from "sonner"
 
 interface DashboardStats {
   totalProducts: number
@@ -68,6 +69,26 @@ interface AdminUser {
   totalSpent: number
 }
 
+interface AdminProduct {
+  id: string
+  name: string
+  slug: string
+  sku: string
+  supplier: string
+  category: string
+  price: number
+  comparePrice?: number
+  cost: number
+  margin: number
+  unit: string
+  minStock: number
+  stock: number
+  status: string
+  images?: string[]
+  isNew: boolean
+  isFeatured: boolean
+}
+
 interface AdminState {
   // Dashboard
   stats: DashboardStats | null
@@ -81,6 +102,10 @@ interface AdminState {
   // Users
   users: AdminUser[]
 
+  // Products
+  products: AdminProduct[]
+  productsTotal: number
+
   loading: boolean
   error: string | null
 
@@ -89,6 +114,8 @@ interface AdminState {
   fetchOrders: (params?: { status?: string; limit?: number; offset?: number }) => Promise<void>
   fetchUsers: (params?: { role?: string; status?: string }) => Promise<void>
   updateOrderStatus: (id: string, status: string) => Promise<void>
+  fetchProducts: (params?: { search?: string; category?: string; status?: string; sortBy?: string }) => Promise<void>
+  deleteProduct: (id: string) => Promise<boolean>
 }
 
 export const useAdminStore = create<AdminState>((set, get) => ({
@@ -98,6 +125,8 @@ export const useAdminStore = create<AdminState>((set, get) => ({
   orders: [],
   ordersTotal: 0,
   users: [],
+  products: [],
+  productsTotal: 0,
   loading: false,
   error: null,
 
@@ -170,6 +199,55 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     } catch (error) {
       set({ error: (error as Error).message, loading: false })
       throw error
+    }
+  },
+
+  fetchProducts: async (params = {}) => {
+    set({ loading: true, error: null })
+    try {
+      const searchParams = new URLSearchParams()
+      if (params.search) searchParams.set("search", params.search)
+      if (params.category) searchParams.set("category", params.category)
+      if (params.status) searchParams.set("status", params.status)
+      if (params.sortBy) searchParams.set("sortBy", params.sortBy)
+
+      const response = await fetch(`/api/products?${searchParams}`)
+      if (!response.ok) throw new Error("Error fetching products")
+      const data = await response.json()
+      set({
+        products: data.products,
+        productsTotal: data.total,
+        loading: false,
+      })
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false })
+    }
+  },
+
+  deleteProduct: async (id) => {
+    const previousProducts = get().products
+    // Optimistic update
+    set({
+      products: previousProducts.filter((p) => p.id !== id),
+      productsTotal: get().productsTotal - 1,
+    })
+
+    try {
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      })
+      if (!response.ok) throw new Error("Error deleting product")
+
+      toast.success("Producto eliminado exitosamente")
+      return true
+    } catch (error) {
+      // Rollback on error
+      set({
+        products: previousProducts,
+        productsTotal: get().productsTotal + 1,
+      })
+      toast.error("Error al eliminar el producto")
+      return false
     }
   },
 }))
