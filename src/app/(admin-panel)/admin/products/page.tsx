@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { Plus, Search, MoreHorizontal, Pencil, Trash2, Eye, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -42,6 +43,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProductImage } from "@/components/products/ProductImage"
 import { formatCOP } from "@/lib/format-currency"
+import { useAdminStore } from "@/stores/admin-store"
 
 interface Product {
   id: string
@@ -52,11 +54,14 @@ interface Product {
   category: string
   price: number
   comparePrice?: number
+  cost: number
+  margin: number
   stock: number
+  minStock: number
+  status: string
   images?: string[]
   isNew: boolean
   isFeatured: boolean
-  status: string
 }
 
 interface Category {
@@ -65,6 +70,9 @@ interface Category {
   slug: string
 }
 
+type SortField = "name" | "price" | "stock" | "status"
+type SortDir = "asc" | "desc"
+
 function ProductsSkeleton() {
   return (
     <Table>
@@ -72,7 +80,9 @@ function ProductsSkeleton() {
         <TableRow>
           <TableHead className="w-[80px]">Imagen</TableHead>
           <TableHead>Producto</TableHead>
+          <TableHead>SKU</TableHead>
           <TableHead>Categoria</TableHead>
+          <TableHead>Proveedor</TableHead>
           <TableHead>Precio</TableHead>
           <TableHead>Stock</TableHead>
           <TableHead>Estado</TableHead>
@@ -83,10 +93,9 @@ function ProductsSkeleton() {
         {[1, 2, 3, 4, 5].map((i) => (
           <TableRow key={i}>
             <TableCell><Skeleton className="h-12 w-12 rounded-md" /></TableCell>
-            <TableCell>
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="mt-1 h-3 w-20" />
-            </TableCell>
+            <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+            <TableCell><Skeleton className="h-4 w-20" /></TableCell>
             <TableCell><Skeleton className="h-4 w-20" /></TableCell>
             <TableCell><Skeleton className="h-4 w-16" /></TableCell>
             <TableCell><Skeleton className="h-4 w-8" /></TableCell>
@@ -99,66 +108,109 @@ function ProductsSkeleton() {
   )
 }
 
+function getStatusBadge(status: string, stock: number) {
+  switch (status) {
+    case "ACTIVE":
+      if (stock === 0) return <Badge variant="destructive">Agotado</Badge>
+      return <Badge variant="default" className="bg-green-600">En stock</Badge>
+    case "INACTIVE":
+      return <Badge variant="secondary">Inactivo</Badge>
+    case "OUT_OF_STOCK":
+      return <Badge variant="destructive">Agotado</Badge>
+    default:
+      return <Badge variant="outline">{status}</Badge>
+  }
+}
+
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<Product[]>([])
+  const { products, productsTotal, loading, fetchProducts, deleteProduct } =
+    useAdminStore()
+
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("all")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [sortField, setSortField] = useState<SortField>("name")
+  const [sortDir, setSortDir] = useState<SortDir>("asc")
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [deleting, setDeleting] = useState(false)
 
+  // Fetch categories once
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCategories = async () => {
       try {
-        const [productsRes, categoriesRes] = await Promise.all([
-          fetch("/api/products"),
-          fetch("/api/categories"),
-        ])
-
-        const productsData = await productsRes.json()
-        const categoriesData = await categoriesRes.json()
-
-        setProducts(productsData.products || [])
-        setCategories(categoriesData || [])
+        const res = await fetch("/api/categories")
+        const data = await res.json()
+        setCategories(data || [])
       } catch (error) {
-        console.error("Error fetching data:", error)
-      } finally {
-        setLoading(false)
+        console.error("Error fetching categories:", error)
       }
     }
-
-    fetchData()
+    fetchCategories()
   }, [])
+
+  // Fetch products when filters change
+  useEffect(() => {
+    fetchProducts({
+      search: searchQuery || undefined,
+      category: categoryFilter !== "all" ? categoryFilter : undefined,
+      status: statusFilter !== "all" ? statusFilter : undefined,
+      sortBy: sortField === "name" ? "newest" : undefined,
+    })
+  }, [searchQuery, categoryFilter, statusFilter, fetchProducts])
+
+  // Client-side sort (API doesn't support all sort fields)
+  const sortedProducts = [...products].sort((a, b) => {
+    const dir = sortDir === "asc" ? 1 : -1
+    switch (sortField) {
+      case "name":
+        return a.name.localeCompare(b.name) * dir
+      case "price":
+        return (a.price - b.price) * dir
+      case "stock":
+        return (a.stock - b.stock) * dir
+      case "status":
+        return a.status.localeCompare(b.status) * dir
+      default:
+        return 0
+    }
+  })
+
+  const handleSort = useCallback((field: SortField) => {
+    if (sortField === field) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+    } else {
+      setSortField(field)
+      setSortDir("asc")
+    }
+  }, [sortField])
 
   const handleDelete = async () => {
     if (!deleteId) return
     setDeleting(true)
     try {
-      const response = await fetch(`/api/products/${deleteId}`, {
-        method: "DELETE",
-      })
-      if (response.ok) {
-        setProducts(products.filter((p) => p.id !== deleteId))
+      const success = await deleteProduct(deleteId)
+      if (success) {
+        // Refresh to ensure consistency
+        fetchProducts({
+          search: searchQuery || undefined,
+          category: categoryFilter !== "all" ? categoryFilter : undefined,
+          status: statusFilter !== "all" ? statusFilter : undefined,
+        })
       }
     } catch (error) {
       console.error("Error deleting product:", error)
+      toast.error("Error al eliminar el producto")
     } finally {
       setDeleting(false)
       setDeleteId(null)
     }
   }
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.supplier.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = categoryFilter === "all" || product.category === categoryFilter
-    return matchesSearch && matchesCategory
-  })
-
-  const inStockCount = products.filter((p) => p.stock > 0).length
-  const outOfStockCount = products.filter((p) => p.stock === 0).length
+  const inStockCount = products.filter((p) => p.stock > 0 && p.status === "ACTIVE").length
+  const outOfStockCount = products.filter(
+    (p) => p.stock === 0 || p.status === "OUT_OF_STOCK"
+  ).length
 
   return (
     <div className="space-y-6">
@@ -187,7 +239,7 @@ export default function AdminProductsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{products.length}</p>
+            <p className="text-2xl font-bold">{productsTotal}</p>
           </CardContent>
         </Card>
         <Card>
@@ -223,12 +275,12 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Buscar productos..."
+            placeholder="Buscar por nombre, SKU o proveedor..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-8"
@@ -247,6 +299,37 @@ export default function AdminProductsPage() {
             ))}
           </SelectContent>
         </Select>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            <SelectItem value="ACTIVE">Activos</SelectItem>
+            <SelectItem value="INACTIVE">Inactivos</SelectItem>
+            <SelectItem value="OUT_OF_STOCK">Agotados</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select
+          value={`${sortField}-${sortDir}`}
+          onValueChange={(val) => {
+            const [field, dir] = val.split("-") as [SortField, SortDir]
+            setSortField(field)
+            setSortDir(dir)
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Ordenar por" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="name-asc">Nombre (A-Z)</SelectItem>
+            <SelectItem value="name-desc">Nombre (Z-A)</SelectItem>
+            <SelectItem value="price-asc">Precio (menor)</SelectItem>
+            <SelectItem value="price-desc">Precio (mayor)</SelectItem>
+            <SelectItem value="stock-asc">Stock (menor)</SelectItem>
+            <SelectItem value="stock-desc">Stock (mayor)</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Table */}
@@ -259,23 +342,45 @@ export default function AdminProductsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px]">Imagen</TableHead>
-                  <TableHead>Producto</TableHead>
+                  <TableHead
+                    className="cursor-pointer select-none hover:bg-muted/50"
+                    onClick={() => handleSort("name")}
+                  >
+                    Producto {sortField === "name" && (sortDir === "asc" ? "↑" : "↓")}
+                  </TableHead>
+                  <TableHead>SKU</TableHead>
                   <TableHead>Categoria</TableHead>
-                  <TableHead>Precio</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Estado</TableHead>
+                  <TableHead>Proveedor</TableHead>
+                  <TableHead
+                    className="cursor-pointer select-none hover:bg-muted/50"
+                    onClick={() => handleSort("price")}
+                  >
+                    Precio {sortField === "price" && (sortDir === "asc" ? "↑" : "↓")}
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer select-none hover:bg-muted/50"
+                    onClick={() => handleSort("stock")}
+                  >
+                    Stock {sortField === "stock" && (sortDir === "asc" ? "↑" : "↓")}
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer select-none hover:bg-muted/50"
+                    onClick={() => handleSort("status")}
+                  >
+                    Estado {sortField === "status" && (sortDir === "asc" ? "↑" : "↓")}
+                  </TableHead>
                   <TableHead className="w-[70px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredProducts.length === 0 ? (
+                {sortedProducts.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                       No se encontraron productos
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredProducts.map((product) => (
+                  sortedProducts.map((product) => (
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="relative h-12 w-12 overflow-hidden rounded-md bg-muted">
@@ -287,23 +392,18 @@ export default function AdminProductsPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div>
-                          <p className="font-medium">{product.name}</p>
-                          <p className="text-xs text-muted-foreground">{product.supplier} · {product.sku}</p>
-                        </div>
+                        <p className="font-medium">{product.name}</p>
                       </TableCell>
+                      <TableCell className="font-mono text-xs">{product.sku}</TableCell>
                       <TableCell className="capitalize">{product.category}</TableCell>
+                      <TableCell>{product.supplier}</TableCell>
                       <TableCell>{formatCOP(product.price)}</TableCell>
-                      <TableCell>{product.stock}</TableCell>
                       <TableCell>
-                        {product.stock > 0 ? (
-                          <Badge variant="default" className="bg-green-600">
-                            En stock
-                          </Badge>
-                        ) : (
-                          <Badge variant="destructive">Agotado</Badge>
-                        )}
+                        <span className={product.stock <= product.minStock ? "text-red-600 font-medium" : ""}>
+                          {product.stock}
+                        </span>
                       </TableCell>
+                      <TableCell>{getStatusBadge(product.status, product.stock)}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
