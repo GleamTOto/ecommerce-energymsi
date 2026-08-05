@@ -33,11 +33,11 @@
 
 ## Phase 4: Admin CRUD (PR 4)
 
-- [ ] 4.1 Adapt admin create form with new fields (SKU, supplier, cost, margin, unit, minStock, status)
-- [ ] 4.2 Create admin edit page at /admin/products/[id]/edit
-- [ ] 4.3 Update admin list page with SKU/supplier/status columns
-- [ ] 4.4 Update API routes for new fields and pagination
-- [ ] 4.5 Add search by SKU support
+- [x] 4.1 Adapt admin create form with new fields (SKU, supplier, cost, margin, unit, minStock, status)
+- [x] 4.2 Create admin edit page at /admin/products/[id]/edit
+- [x] 4.3 Update admin list page with SKU/supplier/status columns
+- [x] 4.4 Update API routes for new fields and pagination
+- [x] 4.5 Add search by SKU support
 
 ## Phase 5: Cleanup (PR 5)
 
