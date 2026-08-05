@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { Plus, Search, MoreHorizontal, Pencil, Trash2, Eye, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,6 +40,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ProductImage } from "@/components/products/ProductImage"
+import { formatCOP } from "@/lib/format-currency"
 
 interface Product {
   id: string
@@ -278,14 +279,11 @@ export default function AdminProductsPage() {
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="relative h-12 w-12 overflow-hidden rounded-md bg-muted">
-                          {product.images && product.images[0] && (
-                            <Image
-                              src={product.images[0]}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                            />
-                          )}
+                          <ProductImage
+                            src={product.images?.[0]}
+                            alt={product.name}
+                            sizes="48px"
+                          />
                         </div>
                       </TableCell>
                       <TableCell>
@@ -295,7 +293,7 @@ export default function AdminProductsPage() {
                         </div>
                       </TableCell>
                       <TableCell className="capitalize">{product.category}</TableCell>
-                      <TableCell>$ {product.price.toLocaleString("es-CO")}</TableCell>
+                      <TableCell>{formatCOP(product.price)}</TableCell>
                       <TableCell>{product.stock}</TableCell>
                       <TableCell>
                         {product.stock > 0 ? (

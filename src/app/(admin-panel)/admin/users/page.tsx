@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAdminStore } from "@/stores/admin-store"
+import { formatCOP } from "@/lib/format-currency"
 
 const statusConfig = {
   active: { label: "Activo", variant: "default" as const, className: "bg-green-600" },
@@ -167,7 +168,7 @@ export default function AdminUsersPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">S/ {totalSpent.toLocaleString()}</p>
+            <p className="text-2xl font-bold">{formatCOP(totalSpent)}</p>
           </CardContent>
         </Card>
       </div>
@@ -261,7 +262,7 @@ export default function AdminUsersPage() {
                           </Badge>
                         </TableCell>
                         <TableCell>{user.orders}</TableCell>
-                        <TableCell>S/ {user.totalSpent.toFixed(2)}</TableCell>
+                        <TableCell>{formatCOP(user.totalSpent)}</TableCell>
                         <TableCell className="text-muted-foreground">
                           {new Date(user.createdAt).toLocaleDateString("es-PE")}
                         </TableCell>

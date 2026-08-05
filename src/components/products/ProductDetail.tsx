@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Product } from "@/types"
 import { useCartStore } from "@/stores/cart-store"
+import { formatCOP } from "@/lib/format-currency"
 
 interface ProductDetailProps {
   product: Product
@@ -73,11 +74,11 @@ export function ProductDetail({ product }: ProductDetailProps) {
       {/* Price */}
       <div className="flex items-baseline gap-3">
         <span className="text-3xl font-bold text-primary">
-          $ {product.price.toLocaleString("es-CO")}
+          {formatCOP(product.price)}
         </span>
         {hasDiscount && (
           <span className="text-lg text-muted-foreground line-through">
-            $ {product.comparePrice!.toLocaleString("es-CO")}
+            {formatCOP(product.comparePrice!)}
           </span>
         )}
       </div>

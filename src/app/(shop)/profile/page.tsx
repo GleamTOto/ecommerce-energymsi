@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useUserStore } from "@/stores/user-store"
+import { formatCOP } from "@/lib/format-currency"
 
 function ProfileSkeleton() {
   return (
@@ -119,7 +120,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader className="pb-2">
             <CardDescription>Total Gastado</CardDescription>
-            <CardTitle className="text-2xl">S/ {stats.totalSpent.toFixed(2)}</CardTitle>
+            <CardTitle className="text-2xl">{formatCOP(stats.totalSpent)}</CardTitle>
           </CardHeader>
         </Card>
       </div>

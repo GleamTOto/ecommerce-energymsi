@@ -115,7 +115,7 @@ export default function SettingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pen">Soles (S/)</SelectItem>
+                  <SelectItem value="cop">Pesos Colombianos ($)</SelectItem>
                   <SelectItem value="usd">Dolares ($)</SelectItem>
                 </SelectContent>
               </Select>

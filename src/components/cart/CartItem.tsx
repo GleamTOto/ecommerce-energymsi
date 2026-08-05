@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
-import { Minus, Plus, Trash2, Package } from "lucide-react"
+import { Minus, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
 import { CartItem as CartItemType } from "@/types"
+import { ProductImage } from "@/components/products/ProductImage"
+import { formatCOP } from "@/lib/format-currency"
 
 interface CartItemProps {
   item: CartItemType
@@ -15,25 +15,16 @@ interface CartItemProps {
 
 export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
   const { product, quantity } = item
-  const productImage = product.images?.[0]
 
   return (
     <div className="flex gap-4 py-4">
       {/* Image */}
       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-muted">
-        {productImage ? (
-          <Image
-            src={productImage}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="96px"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-muted">
-            <Package className="h-8 w-8 text-muted-foreground" />
-          </div>
-        )}
+        <ProductImage
+          src={product.images?.[0]}
+          alt={product.name}
+          sizes="96px"
+        />
       </div>
 
       {/* Details */}
@@ -85,11 +76,11 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
           {/* Price */}
           <div className="text-right">
             <p className="font-semibold text-primary">
-              $ {(product.price * quantity).toLocaleString("es-CO")}
+              {formatCOP(product.price * quantity)}
             </p>
             {quantity > 1 && (
               <p className="text-xs text-muted-foreground">
-                $ {product.price.toLocaleString("es-CO")} c/u
+                {formatCOP(product.price)} c/u
               </p>
             )}
           </div>

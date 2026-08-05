@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
+import { formatCOP } from "@/lib/format-currency"
 
 interface PriceFilterProps {
   priceRange: [number, number]
@@ -16,7 +17,7 @@ export function PriceFilter({
   priceRange,
   onPriceChange,
   minPrice = 0,
-  maxPrice = 5000,
+  maxPrice = 5000000,
 }: PriceFilterProps) {
   const [isOpen, setIsOpen] = useState(true)
 
@@ -59,7 +60,7 @@ export function PriceFilter({
             onValueChange={handleSliderChange}
             min={minPrice}
             max={maxPrice}
-            step={10}
+            step={10000}
             className="w-full"
           />
 
@@ -67,14 +68,14 @@ export function PriceFilter({
             <div className="flex-1">
               <label className="text-xs text-muted-foreground">Min</label>
               <div className="relative">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                  S/
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  $
                 </span>
                 <Input
                   type="number"
                   value={priceRange[0]}
                   onChange={handleMinChange}
-                  className="pl-7 h-9 text-sm"
+                  className="pl-6 h-9 text-sm"
                   min={minPrice}
                   max={priceRange[1]}
                 />
@@ -84,19 +85,24 @@ export function PriceFilter({
             <div className="flex-1">
               <label className="text-xs text-muted-foreground">Max</label>
               <div className="relative">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                  S/
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                  $
                 </span>
                 <Input
                   type="number"
                   value={priceRange[1]}
                   onChange={handleMaxChange}
-                  className="pl-7 h-9 text-sm"
+                  className="pl-6 h-9 text-sm"
                   min={priceRange[0]}
                   max={maxPrice}
                 />
               </div>
             </div>
+          </div>
+
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>{formatCOP(priceRange[0])}</span>
+            <span>{formatCOP(priceRange[1])}</span>
           </div>
         </div>
       )}

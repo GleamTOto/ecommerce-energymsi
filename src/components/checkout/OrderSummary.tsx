@@ -1,9 +1,9 @@
 "use client"
 
-import Image from "next/image"
-import { Package } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { CartItem } from "@/types"
+import { ProductImage } from "@/components/products/ProductImage"
+import { formatCOP } from "@/lib/format-currency"
 
 interface OrderSummaryProps {
   items: CartItem[]
@@ -25,23 +25,14 @@ export function OrderSummary({ items }: OrderSummaryProps) {
       {/* Items */}
       <div className="mt-4 space-y-3">
         {items.map((item) => {
-          const itemImage = item.product.images?.[0]
           return (
             <div key={item.product.id} className="flex gap-3">
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
-                {itemImage ? (
-                  <Image
-                    src={itemImage}
-                    alt={item.product.name}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-muted">
-                    <Package className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                )}
+                <ProductImage
+                  src={item.product.images?.[0]}
+                  alt={item.product.name}
+                  sizes="64px"
+                />
                 <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                   {item.quantity}
                 </span>
@@ -51,7 +42,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
                 <p className="text-xs text-muted-foreground">{item.product.supplier}</p>
               </div>
               <p className="text-sm font-medium">
-                $ {(item.product.price * item.quantity).toLocaleString("es-CO")}
+                {formatCOP(item.product.price * item.quantity)}
               </p>
             </div>
           )
@@ -64,7 +55,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
       <div className="space-y-2">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>$ {subtotal.toLocaleString("es-CO")}</span>
+          <span>{formatCOP(subtotal)}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">IGV (18%)</span>
@@ -72,7 +63,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Envio</span>
-          <span>{shipping === 0 ? "Gratis" : `$ ${shipping.toLocaleString("es-CO")}`}</span>
+          <span>{shipping === 0 ? "Gratis" : formatCOP(shipping)}</span>
         </div>
       </div>
 
@@ -80,7 +71,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
 
       <div className="flex justify-between font-semibold">
         <span>Total</span>
-        <span className="text-lg text-primary">$ {total.toLocaleString("es-CO")}</span>
+        <span className="text-lg text-primary">{formatCOP(total)}</span>
       </div>
     </div>
   )

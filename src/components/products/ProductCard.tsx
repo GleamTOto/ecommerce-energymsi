@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
 import { Heart, ShoppingCart, Star, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,12 +8,12 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Product } from "@/types"
 import { useCartStore } from "@/stores/cart-store"
+import { ProductImage } from "@/components/products/ProductImage"
+import { formatCOP } from "@/lib/format-currency"
 
 interface ProductCardProps {
   product: Product
 }
-
-const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1629429408209-1f912961dbd8?w=400&h=400&fit=crop"
 
 export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem)
@@ -24,8 +23,6 @@ export function ProductCard({ product }: ProductCardProps) {
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0
-
-  const productImage = product.images?.[0] || PLACEHOLDER_IMAGE
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -61,11 +58,10 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Image */}
         <Link href={`/products/${product.slug}`}>
           <div className="relative h-full w-full">
-            <Image
-              src={productImage}
+            <ProductImage
+              src={product.images?.[0]}
               alt={product.name}
-              fill
-              className="object-cover transition-transform group-hover:scale-105"
+              className="transition-transform group-hover:scale-105"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </div>
@@ -115,11 +111,11 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price */}
         <div className="mt-2 flex items-baseline gap-2">
           <span className="text-lg font-bold text-primary">
-            $ {product.price.toLocaleString("es-CO")}
+            {formatCOP(product.price)}
           </span>
           {hasDiscount && (
             <span className="text-sm text-muted-foreground line-through">
-              $ {product.comparePrice!.toLocaleString("es-CO")}
+              {formatCOP(product.comparePrice!)}
             </span>
           )}
         </div>
