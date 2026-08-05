@@ -142,7 +142,14 @@ export function Footer() {
             <ul className="mt-4 space-y-3">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Bogotá, Colombia</span>
+                <Link 
+                  href="https://maps.google.com/?q=EnergyMSI+Bogotá+Colombia" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Bogotá, Colombia
+                </Link>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
