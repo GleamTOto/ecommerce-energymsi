@@ -20,9 +20,9 @@ export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem)
   const [added, setAdded] = useState(false)
 
-  const hasDiscount = product.originalPrice && product.originalPrice > product.price
+  const hasDiscount = product.comparePrice && product.comparePrice > product.price
   const discountPercent = hasDiscount
-    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0
 
   const productImage = product.images?.[0] || PLACEHOLDER_IMAGE
@@ -96,8 +96,8 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <CardContent className="p-3 sm:p-4">
-        {/* Brand */}
-        <p className="text-xs text-muted-foreground">{product.brand}</p>
+        {/* Supplier */}
+        <p className="text-xs text-muted-foreground">{product.supplier}</p>
 
         {/* Name */}
         <Link href={`/products/${product.slug}`}>
@@ -115,11 +115,11 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Price */}
         <div className="mt-2 flex items-baseline gap-2">
           <span className="text-lg font-bold text-primary">
-            S/ {product.price.toFixed(2)}
+            $ {product.price.toLocaleString("es-CO")}
           </span>
           {hasDiscount && (
             <span className="text-sm text-muted-foreground line-through">
-              S/ {product.originalPrice!.toFixed(2)}
+              $ {product.comparePrice!.toLocaleString("es-CO")}
             </span>
           )}
         </div>

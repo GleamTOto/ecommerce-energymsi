@@ -5,26 +5,26 @@ import { ChevronDown, ChevronUp, Search } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { brands } from "@/data/mock-products"
+import { suppliers } from "@/data/mock-products"
 
-interface BrandFilterProps {
-  selectedBrands: string[]
-  onBrandsChange: (brands: string[]) => void
+interface SupplierFilterProps {
+  selectedSuppliers: string[]
+  onSuppliersChange: (suppliers: string[]) => void
 }
 
-export function BrandFilter({ selectedBrands, onBrandsChange }: BrandFilterProps) {
+export function SupplierFilter({ selectedSuppliers, onSuppliersChange }: SupplierFilterProps) {
   const [isOpen, setIsOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredBrands = brands.filter((brand) =>
-    brand.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredSuppliers = suppliers.filter((supplier) =>
+    supplier.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleBrandToggle = (brandName: string) => {
-    if (selectedBrands.includes(brandName)) {
-      onBrandsChange(selectedBrands.filter((b) => b !== brandName))
+  const handleSupplierToggle = (supplierName: string) => {
+    if (selectedSuppliers.includes(supplierName)) {
+      onSuppliersChange(selectedSuppliers.filter((b) => b !== supplierName))
     } else {
-      onBrandsChange([...selectedBrands, brandName])
+      onSuppliersChange([...selectedSuppliers, supplierName])
     }
   }
 
@@ -34,7 +34,7 @@ export function BrandFilter({ selectedBrands, onBrandsChange }: BrandFilterProps
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between py-2 font-medium"
       >
-        Marca
+        Proveedor
         {isOpen ? (
           <ChevronUp className="h-4 w-4" />
         ) : (
@@ -48,7 +48,7 @@ export function BrandFilter({ selectedBrands, onBrandsChange }: BrandFilterProps
             <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar marca..."
+              placeholder="Buscar proveedor..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-8 h-9 text-sm"
@@ -56,20 +56,26 @@ export function BrandFilter({ selectedBrands, onBrandsChange }: BrandFilterProps
           </div>
 
           <div className="max-h-48 space-y-2 overflow-y-auto">
-            {filteredBrands.map((brand) => (
-              <div key={brand.id} className="flex items-center space-x-2">
+            {filteredSuppliers.map((supplier) => (
+              <div key={supplier.id} className="flex items-center space-x-2">
                 <Checkbox
-                  id={`brand-${brand.id}`}
-                  checked={selectedBrands.includes(brand.name)}
-                  onCheckedChange={() => handleBrandToggle(brand.name)}
+                  id={`supplier-${supplier.id}`}
+                  checked={selectedSuppliers.includes(supplier.name)}
+                  onCheckedChange={() => handleSupplierToggle(supplier.name)}
                 />
                 <Label
-                  htmlFor={`brand-${brand.id}`}
+                  htmlFor={`supplier-${supplier.id}`}
                   className="flex flex-1 cursor-pointer items-center justify-between text-sm"
                 >
-                  <span>{brand.name}</span>
+                  <span className="flex items-center gap-2">
+                    <span
+                      className="inline-block h-3 w-3 rounded-full"
+                      style={{ backgroundColor: supplier.color }}
+                    />
+                    {supplier.name}
+                  </span>
                   <span className="text-xs text-muted-foreground">
-                    {brand.productCount}
+                    {supplier.productCount}
                   </span>
                 </Label>
               </div>

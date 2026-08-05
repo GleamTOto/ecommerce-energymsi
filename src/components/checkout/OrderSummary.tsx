@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { Package } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { CartItem } from "@/types"
 
@@ -13,7 +14,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
     (acc, item) => acc + item.product.price * item.quantity,
     0
   )
-  const shipping = subtotal >= 200 ? 0 : 15
+  const shipping = subtotal >= 200000 ? 0 : 15000
   const tax = subtotal * 0.18 // 18% IGV
   const total = subtotal + shipping
 
@@ -23,29 +24,38 @@ export function OrderSummary({ items }: OrderSummaryProps) {
 
       {/* Items */}
       <div className="mt-4 space-y-3">
-        {items.map((item) => (
-          <div key={item.product.id} className="flex gap-3">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
-              <Image
-                src={item.product.images[0]}
-                alt={item.product.name}
-                fill
-                className="object-cover"
-                sizes="64px"
-              />
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
-                {item.quantity}
-              </span>
+        {items.map((item) => {
+          const itemImage = item.product.images?.[0]
+          return (
+            <div key={item.product.id} className="flex gap-3">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
+                {itemImage ? (
+                  <Image
+                    src={itemImage}
+                    alt={item.product.name}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-muted">
+                    <Package className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                )}
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
+                  {item.quantity}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col">
+                <p className="text-sm font-medium line-clamp-2">{item.product.name}</p>
+                <p className="text-xs text-muted-foreground">{item.product.supplier}</p>
+              </div>
+              <p className="text-sm font-medium">
+                $ {(item.product.price * item.quantity).toLocaleString("es-CO")}
+              </p>
             </div>
-            <div className="flex flex-1 flex-col">
-              <p className="text-sm font-medium line-clamp-2">{item.product.name}</p>
-              <p className="text-xs text-muted-foreground">{item.product.brand}</p>
-            </div>
-            <p className="text-sm font-medium">
-              S/ {(item.product.price * item.quantity).toFixed(2)}
-            </p>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <Separator className="my-4" />
@@ -54,7 +64,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
       <div className="space-y-2">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Subtotal</span>
-          <span>S/ {subtotal.toFixed(2)}</span>
+          <span>$ {subtotal.toLocaleString("es-CO")}</span>
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">IGV (18%)</span>
@@ -62,7 +72,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
         </div>
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Envio</span>
-          <span>{shipping === 0 ? "Gratis" : `S/ ${shipping.toFixed(2)}`}</span>
+          <span>{shipping === 0 ? "Gratis" : `$ ${shipping.toLocaleString("es-CO")}`}</span>
         </div>
       </div>
 
@@ -70,7 +80,7 @@ export function OrderSummary({ items }: OrderSummaryProps) {
 
       <div className="flex justify-between font-semibold">
         <span>Total</span>
-        <span className="text-lg text-primary">S/ {total.toFixed(2)}</span>
+        <span className="text-lg text-primary">$ {total.toLocaleString("es-CO")}</span>
       </div>
     </div>
   )

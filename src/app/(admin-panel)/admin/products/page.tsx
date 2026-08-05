@@ -46,14 +46,16 @@ interface Product {
   id: string
   name: string
   slug: string
-  brand: string
+  sku: string
+  supplier: string
   category: string
   price: number
-  originalPrice?: number
+  comparePrice?: number
   stock: number
-  images: string[]
+  images?: string[]
   isNew: boolean
   isFeatured: boolean
+  status: string
 }
 
 interface Category {
@@ -148,7 +150,8 @@ export default function AdminProductsPage() {
 
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.brand.toLowerCase().includes(searchQuery.toLowerCase())
+      product.supplier.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.sku.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = categoryFilter === "all" || product.category === categoryFilter
     return matchesSearch && matchesCategory
   })
@@ -275,7 +278,7 @@ export default function AdminProductsPage() {
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="relative h-12 w-12 overflow-hidden rounded-md bg-muted">
-                          {product.images[0] && (
+                          {product.images && product.images[0] && (
                             <Image
                               src={product.images[0]}
                               alt={product.name}
@@ -288,11 +291,11 @@ export default function AdminProductsPage() {
                       <TableCell>
                         <div>
                           <p className="font-medium">{product.name}</p>
-                          <p className="text-xs text-muted-foreground">{product.brand}</p>
+                          <p className="text-xs text-muted-foreground">{product.supplier} · {product.sku}</p>
                         </div>
                       </TableCell>
                       <TableCell className="capitalize">{product.category}</TableCell>
-                      <TableCell>S/ {product.price.toFixed(2)}</TableCell>
+                      <TableCell>$ {product.price.toLocaleString("es-CO")}</TableCell>
                       <TableCell>{product.stock}</TableCell>
                       <TableCell>
                         {product.stock > 0 ? (

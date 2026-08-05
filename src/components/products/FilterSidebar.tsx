@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { BrandFilter } from "./BrandFilter"
+import { SupplierFilter } from "./SupplierFilter"
 import { PriceFilter } from "./PriceFilter"
 import { CategoryFilter } from "./CategoryFilter"
 import { FilterState } from "@/types"
@@ -14,16 +14,16 @@ interface FilterSidebarProps {
 
 export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) {
   const hasActiveFilters =
-    filters.brands.length > 0 ||
+    filters.suppliers.length > 0 ||
     filters.categories.length > 0 ||
     filters.priceRange[0] > 0 ||
-    filters.priceRange[1] < 5000
+    filters.priceRange[1] < 5000000
 
   const handleClearFilters = () => {
     onFiltersChange({
-      brands: [],
+      suppliers: [],
       categories: [],
-      priceRange: [0, 5000],
+      priceRange: [0, 5000000],
       sortBy: filters.sortBy,
     })
   }
@@ -45,10 +45,10 @@ export function FilterSidebar({ filters, onFiltersChange }: FilterSidebarProps) 
         )}
       </div>
 
-      <BrandFilter
-        selectedBrands={filters.brands}
-        onBrandsChange={(brands) =>
-          onFiltersChange({ ...filters, brands })
+      <SupplierFilter
+        selectedSuppliers={filters.suppliers}
+        onSuppliersChange={(suppliers) =>
+          onFiltersChange({ ...filters, suppliers })
         }
       />
 

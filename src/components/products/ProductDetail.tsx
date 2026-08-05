@@ -17,9 +17,9 @@ export function ProductDetail({ product }: ProductDetailProps) {
   const [added, setAdded] = useState(false)
   const addItem = useCartStore((state) => state.addItem)
 
-  const hasDiscount = product.originalPrice && product.originalPrice > product.price
+  const hasDiscount = product.comparePrice && product.comparePrice > product.price
   const discountPercent = hasDiscount
-    ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
+    ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0
 
   const decreaseQuantity = () => {
@@ -46,8 +46,8 @@ export function ProductDetail({ product }: ProductDetailProps) {
         {hasDiscount && <Badge variant="destructive">-{discountPercent}%</Badge>}
       </div>
 
-      {/* Brand */}
-      <p className="text-sm text-muted-foreground">{product.brand}</p>
+      {/* Supplier */}
+      <p className="text-sm text-muted-foreground">{product.supplier}</p>
 
       {/* Name */}
       <h1 className="text-2xl font-bold sm:text-3xl">{product.name}</h1>
@@ -73,11 +73,11 @@ export function ProductDetail({ product }: ProductDetailProps) {
       {/* Price */}
       <div className="flex items-baseline gap-3">
         <span className="text-3xl font-bold text-primary">
-          S/ {product.price.toFixed(2)}
+          $ {product.price.toLocaleString("es-CO")}
         </span>
         {hasDiscount && (
           <span className="text-lg text-muted-foreground line-through">
-            S/ {product.originalPrice!.toFixed(2)}
+            $ {product.comparePrice!.toLocaleString("es-CO")}
           </span>
         )}
       </div>
@@ -165,7 +165,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
           <Truck className="h-5 w-5 text-muted-foreground" />
           <div>
             <p className="font-medium">Envio gratis</p>
-            <p className="text-xs text-muted-foreground">En pedidos +S/ 200</p>
+            <p className="text-xs text-muted-foreground">En pedidos +$ 200.000</p>
           </div>
         </div>
         <div className="flex items-center gap-3 text-sm">

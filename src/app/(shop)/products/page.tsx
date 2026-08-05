@@ -20,7 +20,7 @@ import { FilterState } from "@/types"
 
 function ProductsContent() {
   const searchParams = useSearchParams()
-  const { products, loading, filters, setFilters, fetchProducts, fetchCategories, fetchBrands } = useProductsStore()
+  const { products, loading, filters, setFilters, fetchProducts, fetchCategories, fetchSuppliers } = useProductsStore()
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
   // Initialize filters from URL params
@@ -41,8 +41,8 @@ function ProductsContent() {
     }
 
     fetchCategories()
-    fetchBrands()
-  }, [searchParams, setFilters, fetchCategories, fetchBrands])
+    fetchSuppliers()
+  }, [searchParams, setFilters, fetchCategories, fetchSuppliers])
 
   // Fetch products when filters change
   useEffect(() => {
@@ -54,9 +54,9 @@ function ProductsContent() {
   }, [setFilters])
 
   const activeFilterCount =
-    filters.brands.length +
+    filters.suppliers.length +
     filters.categories.length +
-    (filters.priceRange[0] > 0 || filters.priceRange[1] < 10000 ? 1 : 0)
+    (filters.priceRange[0] > 0 || filters.priceRange[1] < 5000000 ? 1 : 0)
 
   return (
     <div className="container mx-auto px-4 py-6">

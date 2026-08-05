@@ -8,15 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { ShippingForm } from "@/components/checkout/ShippingForm";
 import { PaymentForm } from "@/components/checkout/PaymentForm";
 import { OrderSummary } from "@/components/checkout/OrderSummary";
-import { products } from "@/data/mock-products";
-import { CartItem } from "@/types";
+import { products } from "@/data/mock-products"
+import type { CartItem, Product } from "@/types"
 
-// Mock cart data
-const cartItems: CartItem[] = [
-  { product: products[0], quantity: 1 },
-  { product: products[1], quantity: 2 },
-  { product: products[2], quantity: 1 },
-];
+// Mock cart data - use first 3 products that exist
+const cartProducts = products.slice(0, 3)
+const cartItems: CartItem[] = cartProducts.map((p) => ({ product: p, quantity: 1 }))
 
 const steps = [
   { id: 1, name: "Envio" },

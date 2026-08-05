@@ -30,12 +30,18 @@ interface UploadedImage {
 const productSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   slug: z.string().min(1, "El slug es requerido"),
+  sku: z.string().min(1, "El SKU es requerido"),
   description: z.string().min(1, "La descripcion es requerida"),
   price: z.number().min(0, "El precio debe ser mayor a 0"),
   comparePrice: z.number().optional(),
+  cost: z.number().min(0, "El costo debe ser mayor o igual a 0"),
+  margin: z.number().min(0).max(100, "El margen debe ser entre 0 y 100"),
+  unit: z.string().min(1, "La unidad es requerida"),
+  minStock: z.number().min(0, "El stock minimo debe ser mayor o igual a 0"),
   stock: z.number().min(0, "El stock debe ser mayor o igual a 0"),
+  status: z.enum(["ACTIVE", "INACTIVE", "OUT_OF_STOCK"]),
   categoryId: z.string().min(1, "La categoria es requerida"),
-  brandId: z.string().min(1, "La marca es requerida"),
+  supplierId: z.string().min(1, "El proveedor es requerido"),
   isNew: z.boolean(),
   isFeatured: z.boolean(),
 })
@@ -48,7 +54,7 @@ interface Category {
   slug: string
 }
 
-interface Brand {
+interface Supplier {
   id: string
   name: string
   slug: string
@@ -57,7 +63,7 @@ interface Brand {
 export default function NewProductPage() {
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
-  const [brands, setBrands] = useState<Brand[]>([])
+  const [suppliers, setSuppliers] = useState<Supplier[]>([])
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [images, setImages] = useState<UploadedImage[]>([])
@@ -74,22 +80,27 @@ export default function NewProductPage() {
       isNew: false,
       isFeatured: false,
       stock: 0,
+      cost: 0,
+      margin: 0,
+      unit: "UNIDAD",
+      minStock: 0,
+      status: "ACTIVE" as const,
     },
   })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [categoriesRes, brandsRes] = await Promise.all([
+        const [categoriesRes, suppliersRes] = await Promise.all([
           fetch("/api/categories"),
-          fetch("/api/brands"),
+          fetch("/api/suppliers"),
         ])
 
         const categoriesData = await categoriesRes.json()
-        const brandsData = await brandsRes.json()
+        const suppliersData = await suppliersRes.json()
 
         setCategories(categoriesData || [])
-        setBrands(brandsData || [])
+        setSuppliers(suppliersData || [])
       } catch (error) {
         console.error("Error fetching data:", error)
       } finally {
@@ -110,11 +121,6 @@ export default function NewProductPage() {
   }
 
   const onSubmit = async (data: ProductFormData) => {
-    if (images.length === 0) {
-      alert("Debes subir al menos una imagen")
-      return
-    }
-
     setSaving(true)
     try {
       const response = await fetch("/api/products", {
@@ -198,6 +204,34 @@ export default function NewProductPage() {
               </div>
             </div>
 
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="sku">SKU</Label>
+                <Input
+                  id="sku"
+                  placeholder="NET-001"
+                  {...register("sku")}
+                />
+                {errors.sku && (
+                  <p className="text-sm text-destructive">{errors.sku.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="unit">Unidad</Label>
+                <Select onValueChange={(value) => setValue("unit", value)} defaultValue="UNIDAD">
+                  <SelectTrigger id="unit">
+                    <SelectValue placeholder="Seleccionar unidad" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="UNIDAD">UNIDAD</SelectItem>
+                    <SelectItem value="CAJA">CAJA</SelectItem>
+                    <SelectItem value="PAQUETE">PAQUETE</SelectItem>
+                    <SelectItem value="ROLLO">ROLLO</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="description">Descripcion</Label>
               <Textarea
@@ -231,21 +265,21 @@ export default function NewProductPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="brandId">Marca</Label>
-                <Select onValueChange={(value) => setValue("brandId", value)}>
-                  <SelectTrigger id="brandId">
-                    <SelectValue placeholder="Seleccionar marca" />
+                <Label htmlFor="supplierId">Proveedor</Label>
+                <Select onValueChange={(value) => setValue("supplierId", value)}>
+                  <SelectTrigger id="supplierId">
+                    <SelectValue placeholder="Seleccionar proveedor" />
                   </SelectTrigger>
                   <SelectContent>
-                    {brands.map((brand) => (
-                      <SelectItem key={brand.id} value={brand.id}>
-                        {brand.name}
+                    {suppliers.map((supplier) => (
+                      <SelectItem key={supplier.id} value={supplier.id}>
+                        {supplier.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.brandId && (
-                  <p className="text-sm text-destructive">{errors.brandId.message}</p>
+                {errors.supplierId && (
+                  <p className="text-sm text-destructive">{errors.supplierId.message}</p>
                 )}
               </div>
             </div>
@@ -262,12 +296,12 @@ export default function NewProductPage() {
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="price">Precio (S/)</Label>
+                <Label htmlFor="price">Precio Venta ($)</Label>
                 <Input
                   id="price"
                   type="number"
-                  step="0.01"
-                  placeholder="0.00"
+                  step="1"
+                  placeholder="0"
                   {...register("price", { valueAsNumber: true })}
                 />
                 {errors.price && (
@@ -275,13 +309,38 @@ export default function NewProductPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="comparePrice">Precio anterior (opcional)</Label>
+                <Label htmlFor="cost">Costo Compra ($)</Label>
+                <Input
+                  id="cost"
+                  type="number"
+                  step="1"
+                  placeholder="0"
+                  {...register("cost", { valueAsNumber: true })}
+                />
+                {errors.cost && (
+                  <p className="text-sm text-destructive">{errors.cost.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="comparePrice">Precio Comparar (opcional)</Label>
                 <Input
                   id="comparePrice"
                   type="number"
-                  step="0.01"
-                  placeholder="0.00"
+                  step="1"
+                  placeholder="0"
                   {...register("comparePrice", { valueAsNumber: true })}
+                />
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-4">
+              <div className="space-y-2">
+                <Label htmlFor="margin">Margen (%)</Label>
+                <Input
+                  id="margin"
+                  type="number"
+                  step="0.01"
+                  placeholder="0"
+                  {...register("margin", { valueAsNumber: true })}
                 />
               </div>
               <div className="space-y-2">
@@ -295,6 +354,28 @@ export default function NewProductPage() {
                 {errors.stock && (
                   <p className="text-sm text-destructive">{errors.stock.message}</p>
                 )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="minStock">Stock Minimo</Label>
+                <Input
+                  id="minStock"
+                  type="number"
+                  placeholder="0"
+                  {...register("minStock", { valueAsNumber: true })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="status">Estado</Label>
+                <Select onValueChange={(value) => setValue("status", value as "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK")} defaultValue="ACTIVE">
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ACTIVE">Activo</SelectItem>
+                    <SelectItem value="INACTIVE">Inactivo</SelectItem>
+                    <SelectItem value="OUT_OF_STOCK">Agotado</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardContent>
