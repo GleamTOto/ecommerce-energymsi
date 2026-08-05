@@ -56,16 +56,16 @@ export function ProductSpecsEditor({ value, onChange }: ProductSpecsEditorProps)
 
   return (
     <div className="space-y-3">
-      <Label>Especificaciones del producto</Label>
+      <Label>Especificaciones técnicas</Label>
       <p className="text-sm text-muted-foreground">
-        Agrega especificaciones tecnicas como marca del procesador, velocidad, etc.
+        Agrega especificaciones como voltaje, capacidad, tipo de batería, etc.
       </p>
 
       {rows.map((row, index) => (
         <div key={index} className="flex items-start gap-2">
           <div className="flex-1 space-y-1">
             <Input
-              placeholder="Nombre (ej: Procesador)"
+              placeholder="Ej: Voltaje, Capacidad, Tipo"
               value={row.key}
               onChange={(e) => updateRow(index, "key", e.target.value)}
               className="h-9"
@@ -73,7 +73,7 @@ export function ProductSpecsEditor({ value, onChange }: ProductSpecsEditorProps)
           </div>
           <div className="flex-1 space-y-1">
             <Input
-              placeholder="Valor (ej: Intel Core i7)"
+              placeholder="Ej: 12V, 7.5Ah, Plomo-ácido"
               value={row.value}
               onChange={(e) => updateRow(index, "value", e.target.value)}
               className="h-9"
@@ -99,7 +99,7 @@ export function ProductSpecsEditor({ value, onChange }: ProductSpecsEditorProps)
         className="mt-2"
       >
         <Plus className="mr-1 h-3 w-3" />
-        Agregar especificacion
+        Agregar especificación
       </Button>
     </div>
   )
