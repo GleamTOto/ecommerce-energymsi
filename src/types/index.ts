@@ -1,18 +1,26 @@
+export type ProductStatus = "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK"
+
 export interface Product {
   id: string
   name: string
   slug: string
-  brand: string
-  category: string
-  price: number
-  originalPrice?: number
-  images: string[]
+  sku: string
   description: string
+  price: number
+  comparePrice?: number
+  cost: number
+  margin: number
+  unit: string
+  minStock: number
+  status: ProductStatus
+  images?: string[]
   specs: Record<string, string>
   stock: number
   isNew: boolean
   isFeatured: boolean
   rating: number
+  supplier: string
+  category: string
 }
 
 export interface Category {
@@ -20,13 +28,17 @@ export interface Category {
   name: string
   slug: string
   icon: string
+  color?: string
+  description?: string
   productCount: number
 }
 
-export interface Brand {
+export interface Supplier {
   id: string
   name: string
-  logo?: string
+  slug: string
+  description?: string
+  color?: string
   productCount: number
 }
 
@@ -37,7 +49,7 @@ export interface CartItem {
 
 export interface FilterState {
   categories: string[]
-  brands: string[]
+  suppliers: string[]
   priceRange: [number, number]
   sortBy: 'popular' | 'price-asc' | 'price-desc' | 'newest' | 'rating'
 }
