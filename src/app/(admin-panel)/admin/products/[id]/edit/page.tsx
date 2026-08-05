@@ -37,24 +37,7 @@ export default function EditProductPage() {
 
         const data = await response.json()
 
-        // Transform API response to form initial data
-        // The API returns category/supplier as slugs, but we need IDs
-        // We'll need to fetch categories and suppliers to map slugs to IDs
-        const [categoriesRes, suppliersRes] = await Promise.all([
-          fetch("/api/categories"),
-          fetch("/api/suppliers"),
-        ])
-
-        const categories = await categoriesRes.json()
-        const suppliers = await suppliersRes.json()
-
-        const category = categories?.find(
-          (c: { slug: string }) => c.slug === data.category
-        )
-        const supplier = suppliers?.find(
-          (s: { slug: string }) => s.slug === data.supplier
-        )
-
+        // API now returns categoryId and supplierId directly
         const initialData: ProductFormInitialData = {
           name: data.name,
           slug: data.slug,
@@ -68,8 +51,8 @@ export default function EditProductPage() {
           minStock: data.minStock,
           stock: data.stock,
           status: data.status,
-          categoryId: category?.id || "",
-          supplierId: supplier?.id || "",
+          categoryId: data.categoryId || "",
+          supplierId: data.supplierId || "",
           isNew: data.isNew,
           isFeatured: data.isFeatured,
           specs: data.specs || {},

@@ -272,8 +272,8 @@ export function ProductForm({
             <div className="space-y-2">
               <Label htmlFor="unit">Unidad</Label>
               <Select
+                value={watch("unit")}
                 onValueChange={(value) => setValue("unit", value)}
-                defaultValue={initialData?.unit || "UNIDAD"}
               >
                 <SelectTrigger id="unit">
                   <SelectValue placeholder="Seleccionar unidad" />
@@ -305,8 +305,8 @@ export function ProductForm({
             <div className="space-y-2">
               <Label htmlFor="categoryId">Categoria</Label>
               <Select
+                value={watch("categoryId")}
                 onValueChange={(value) => setValue("categoryId", value)}
-                defaultValue={initialData?.categoryId}
               >
                 <SelectTrigger id="categoryId">
                   <SelectValue placeholder="Seleccionar categoria" />
@@ -326,8 +326,8 @@ export function ProductForm({
             <div className="space-y-2">
               <Label htmlFor="supplierId">Proveedor</Label>
               <Select
+                value={watch("supplierId")}
                 onValueChange={(value) => setValue("supplierId", value)}
-                defaultValue={initialData?.supplierId}
               >
                 <SelectTrigger id="supplierId">
                   <SelectValue placeholder="Seleccionar proveedor" />
@@ -430,10 +430,10 @@ export function ProductForm({
             <div className="space-y-2">
               <Label htmlFor="status">Estado</Label>
               <Select
+                value={watch("status")}
                 onValueChange={(value) =>
                   setValue("status", value as "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK")
                 }
-                defaultValue={initialData?.status || "ACTIVE"}
               >
                 <SelectTrigger id="status">
                   <SelectValue placeholder="Estado" />
