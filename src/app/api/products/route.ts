@@ -54,32 +54,48 @@ export async function GET(request: NextRequest) {
     }
 
     // Build orderBy
-    let orderBy: Record<string, string> = { createdAt: "desc" }
-    switch (sortBy) {
-      case "price-asc":
-        orderBy = { price: "asc" }
-        break
-      case "price-desc":
-        orderBy = { price: "desc" }
-        break
-      case "newest":
-        orderBy = { createdAt: "desc" }
-        break
-      case "popular":
-        orderBy = { stock: "desc" } // Placeholder - would use sales count
-        break
+    let orderBy: Record<string, string> | Record<string, string>[] = { createdAt: "desc" }
+    
+    // If featured=true and no specific sortBy, use random order
+    if (featured === "true" && sortBy === "newest") {
+      // For random ordering, we'll fetch all and shuffle in memory
+      // This is acceptable for small datasets (featured products)
+      orderBy = { createdAt: "desc" } // We'll shuffle after fetching
+    } else {
+      switch (sortBy) {
+        case "price-asc":
+          orderBy = { price: "asc" }
+          break
+        case "price-desc":
+          orderBy = { price: "desc" }
+          break
+        case "newest":
+          orderBy = { createdAt: "desc" }
+          break
+        case "popular":
+          orderBy = { stock: "desc" } // Placeholder - would use sales count
+          break
+      }
     }
 
-    const products = await prisma.product.findMany({
+    let products = await prisma.product.findMany({
       where,
       orderBy,
       include: {
         category: true,
         supplier: true,
       },
-      take: limit ? Number(limit) : undefined,
+      take: featured === "true" && sortBy === "newest" ? undefined : (limit ? Number(limit) : undefined),
       skip: offset ? Number(offset) : undefined,
     })
+
+    // Shuffle products if featured and no specific sort
+    if (featured === "true" && sortBy === "newest") {
+      products = products.sort(() => Math.random() - 0.5)
+      if (limit) {
+        products = products.slice(0, Number(limit))
+      }
+    }
 
     const total = await prisma.product.count({ where })
 

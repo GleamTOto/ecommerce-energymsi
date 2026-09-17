@@ -1,13 +1,14 @@
 import { Product } from "@/types"
 
 // Featured products with images for HeroBanner fallback
+// These are used when the API fails or returns no products
 export const featuredProductsWithImages: Product[] = [
   {
     id: "featured-1",
-    name: "Batería Netion 12V 7AH",
-    slug: "bateria-netion-12v-7ah",
-    sku: "NBAT-7",
-    description: "Batería sellada de plomo-ácido de 12V y 7AH, ideal para UPS y sistemas de respaldo",
+    name: "Batería Sellada 12V 7AH",
+    slug: "bateria-sellada-12v-7ah",
+    sku: "BAT-12V-7AH",
+    description: "Batería sellada de plomo-ácido de 12V y 7AH, ideal para UPS y sistemas de respaldo de energía",
     price: 85000,
     cost: 60000,
     margin: 0.3,
@@ -26,15 +27,15 @@ export const featuredProductsWithImages: Product[] = [
       tipo: "Plomo-ácido sellada",
     },
     images: [
-      "https://images.unsplash.com/photo-1620283085439-39620a1e21c4?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1620283085439-39620a1e21c4?w=800&h=800&fit=crop&auto=format",
     ],
   },
   {
     id: "featured-2",
-    name: "UPS Netion 1500VA",
-    slug: "ups-netion-1500va",
-    sku: "NUPS-1500",
-    description: "Sistema de alimentación ininterrumpida de 1500VA con protección contra sobretensiones",
+    name: "UPS 1500VA Line-Interactive",
+    slug: "ups-1500va-line-interactive",
+    sku: "UPS-1500VA",
+    description: "Sistema de alimentación ininterrumpida de 1500VA con protección contra sobretensiones y apagado seguro",
     price: 450000,
     cost: 320000,
     margin: 0.3,
@@ -45,23 +46,23 @@ export const featuredProductsWithImages: Product[] = [
     isNew: true,
     isFeatured: true,
     rating: 4.8,
-    supplier: "Netion",
-    category: "ups-y-sistemas-de-proteccion",
+    supplier: "APC",
+    category: "ups",
     specs: {
       potencia: "1500VA / 900W",
       tipo: "Line-interactive",
       tiempo_respaldo: "10 minutos a media carga",
     },
     images: [
-      "https://images.unsplash.com/photo-1597872200969-2b68d3e3d49b?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1597872200969-2b68d3e3d49b?w=800&h=800&fit=crop&auto=format",
     ],
   },
   {
     id: "featured-3",
-    name: "Multímetro Digital Truper",
-    slug: "multimetro-digital-truper",
-    sku: "TRU-MULT-01",
-    description: "Multímetro digital profesional con medición de voltaje AC/DC, corriente y resistencia",
+    name: "Multímetro Digital Profesional",
+    slug: "multimetro-digital-profesional",
+    sku: "MULT-DIG-PRO",
+    description: "Multímetro digital profesional con medición de voltaje AC/DC, corriente, resistencia y capacitancia",
     price: 120000,
     cost: 85000,
     margin: 0.3,
@@ -72,15 +73,15 @@ export const featuredProductsWithImages: Product[] = [
     isNew: false,
     isFeatured: true,
     rating: 4.6,
-    supplier: "Truper",
+    supplier: "Fluke",
     category: "multimetros",
     specs: {
       tipo: "Digital",
-      mediciones: "AC/DC Voltage, Current, Resistance",
+      mediciones: "AC/DC Voltage, Current, Resistance, Capacitance",
       precision: "±0.5%",
     },
     images: [
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&h=800&fit=crop&auto=format",
     ],
   },
 ]

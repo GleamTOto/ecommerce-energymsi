@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Autoplay from "embla-carousel-autoplay"
-import { Package } from "lucide-react"
+import { Package, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Carousel,
@@ -105,8 +105,13 @@ export function HeroBanner({ products }: HeroBannerProps) {
                               className="w-full h-full"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center">
-                              <Package className="h-20 w-20 text-white/30" />
+                            <div className="flex h-full w-full flex-col items-center justify-center gap-4">
+                              <div className="rounded-full bg-white/10 p-6">
+                                <Zap className="h-16 w-16 text-primary" />
+                              </div>
+                              <p className="text-sm text-white/60 text-center">
+                                Producto destacado
+                              </p>
                             </div>
                           )}
                         </div>
