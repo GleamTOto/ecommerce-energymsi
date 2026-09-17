@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Autoplay from "embla-carousel-autoplay"
+import { Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Carousel,
@@ -51,59 +52,71 @@ export function HeroBanner({ products }: HeroBannerProps) {
         }}
       >
         <CarouselContent>
-          {slides.map((slide) => (
-            <CarouselItem key={slide.id}>
-              <div className={`relative overflow-hidden bg-gradient-to-br ${slide.gradient}`}>
-                {/* Background Product Image */}
-                <div className="absolute inset-0 opacity-20">
-                  <ProductImage
-                    src={slide.product.images?.[0]}
-                    alt=""
-                    className="w-full h-full"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
-                  <div className="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
-                    {/* Text Content */}
-                    <div className="max-w-xl text-center lg:text-left">
-                      <span className="inline-block rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white mb-3">
-                        {slide.product.isNew ? "Nuevo" : slide.product.isFeatured ? "Destacado" : "Disponible"}
-                      </span>
-                      <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                        {slide.product.name}
-                        <span className="block text-primary">{formatCOP(slide.product.price)}</span>
-                      </h2>
-                      <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-md mx-auto lg:mx-0">
-                        {slide.product.description || `Producto de la categoría ${slide.product.category}`}
-                      </p>
-                      <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                        <Button asChild size="default">
-                          <Link href={`/products/${slide.product.slug}`}>Ver Producto</Link>
-                        </Button>
-                        <Button asChild variant="outline" className="border-slate-600 text-white hover:bg-slate-800">
-                          <Link href="/products">Ver Todo</Link>
-                        </Button>
-                      </div>
+          {slides.map((slide) => {
+            const hasImage = slide.product.images && slide.product.images.length > 0
+            return (
+              <CarouselItem key={slide.id}>
+                <div className={`relative overflow-hidden bg-gradient-to-br ${slide.gradient}`}>
+                  {/* Background Product Image */}
+                  {hasImage && (
+                    <div className="absolute inset-0 opacity-20">
+                      <ProductImage
+                        src={slide.product.images?.[0]}
+                        alt=""
+                        className="w-full h-full"
+                      />
                     </div>
+                  )}
 
-                    {/* Visual Element */}
-                    <div className="relative w-72 h-52 sm:w-96 sm:h-72 lg:w-[500px] lg:h-80">
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-3xl rounded-full" />
-                      <div className="relative h-full overflow-hidden shadow-2xl">
-                        <ProductImage
-                          src={slide.product.images?.[0]}
-                          alt={slide.product.name}
-                          className="w-full h-full"
-                        />
+                  {/* Content */}
+                  <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20">
+                    <div className="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16">
+                      {/* Text Content */}
+                      <div className="max-w-xl text-center lg:text-left">
+                        <span className="inline-block rounded-full bg-white/10 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white mb-3">
+                          {slide.product.isNew ? "Nuevo" : slide.product.isFeatured ? "Destacado" : "Disponible"}
+                        </span>
+                        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                          {slide.product.name}
+                          <span className="block text-primary">{formatCOP(slide.product.price)}</span>
+                        </h2>
+                        <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-md mx-auto lg:mx-0">
+                          {slide.product.description || `Producto de la categoría ${slide.product.category}`}
+                        </p>
+                        <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                          <Button asChild size="default">
+                            <Link href={`/products/${slide.product.slug}`}>Ver Producto</Link>
+                          </Button>
+                          <Button asChild variant="outline" className="border-slate-600 text-white hover:bg-slate-800">
+                            <Link href="/products">Ver Todo</Link>
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Visual Element */}
+                      <div className="relative w-72 h-52 sm:w-96 sm:h-72 lg:w-[500px] lg:h-80">
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-3xl rounded-full" />
+                        <div className="relative h-full overflow-hidden shadow-2xl rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 p-4">
+                          {hasImage ? (
+                            <ProductImage
+                              src={slide.product.images?.[0]}
+                              alt={slide.product.name}
+                              fit="contain"
+                              className="w-full h-full"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center">
+                              <Package className="h-20 w-20 text-white/30" />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </CarouselItem>
-          ))}
+              </CarouselItem>
+            )
+          })}
         </CarouselContent>
 
         {/* Navigation Arrows */}

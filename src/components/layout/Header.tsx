@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import {
-  Search,
   ShoppingCart,
   Heart,
   User,
@@ -12,9 +11,9 @@ import {
   Settings,
   Package,
   ChevronDown,
+  Store,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -25,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MobileNav } from "./MobileNav";
+import { SearchBar } from "./SearchBar";
 import { useCartStore } from "@/stores/cart-store";
 
 export function Header() {
@@ -127,28 +127,20 @@ export function Header() {
 
           {/* Search Bar - Desktop */}
           <div className="hidden flex-1 max-w-xl md:flex">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Buscar productos..."
-                className="w-full pl-10 pr-4"
-              />
-            </div>
+            <SearchBar />
           </div>
 
           {/* Actions */}
           <div className="flex items-center gap-1">
-            {/* Search - Mobile */}
-            <Button variant="ghost" size="icon" className="h-9 w-9 md:hidden">
-              <Search className="h-4 w-4" />
-              <span className="sr-only">Buscar</span>
-            </Button>
-
-            {/* Products Link */}
+            {/* Tienda Link */}
             <Link href="/products" className="hidden md:block">
-              <Button variant="ghost" size="sm" className="font-semibold">
-                PRODUCTOS
+              <Button
+                variant="ghost"
+                size="sm"
+                className="font-semibold gap-2 text-primary hover:text-primary hover:bg-primary/10"
+              >
+                <Store className="h-4 w-4" />
+                TIENDA
               </Button>
             </Link>
 
@@ -265,14 +257,7 @@ export function Header() {
 
         {/* Search Bar - Mobile */}
         <div className="pb-3 md:hidden">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Buscar productos..."
-              className="w-full pl-10 pr-4"
-            />
-          </div>
+          <SearchBar mobile />
         </div>
       </div>
     </header>

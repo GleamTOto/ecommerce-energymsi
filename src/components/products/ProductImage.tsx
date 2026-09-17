@@ -13,6 +13,7 @@ interface ProductImageProps {
   priority?: boolean
   sizes?: string
   fill?: boolean
+  fit?: "cover" | "contain"
 }
 
 export function ProductImage({
@@ -22,6 +23,7 @@ export function ProductImage({
   priority = false,
   sizes,
   fill = true,
+  fit = "cover",
 }: ProductImageProps) {
   const [imgError, setImgError] = useState(false)
 
@@ -40,7 +42,7 @@ export function ProductImage({
       src={src}
       alt={alt}
       fill={fill}
-      className={cn("object-cover", className)}
+      className={cn(fit === "contain" ? "object-contain" : "object-cover", className)}
       sizes={sizes}
       priority={priority}
       onError={() => setImgError(true)}

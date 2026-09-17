@@ -17,10 +17,11 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Main Image */}
-      <div className="relative aspect-square overflow-hidden rounded-lg bg-muted">
+      <div className="relative aspect-square overflow-hidden rounded-lg bg-white p-6">
         <ProductImage
           src={currentImage}
           alt={productName}
+          fit="contain"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
         />
@@ -34,7 +35,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               key={index}
               onClick={() => setSelectedIndex(index)}
               className={cn(
-                "relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-colors",
+                "relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 bg-white p-1 transition-colors",
                 selectedIndex === index
                   ? "border-primary"
                   : "border-transparent hover:border-muted-foreground/50"
@@ -43,7 +44,8 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               <ProductImage
                 src={image}
                 alt={`${productName} - ${index + 1}`}
-                sizes="64px"
+                fit="contain"
+                sizes="80px"
               />
             </button>
           ))}

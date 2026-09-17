@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, Monitor, Keyboard, Mouse, Headphones, HardDrive, Cpu, User, Heart, Package } from "lucide-react"
+import { Menu, Monitor, Keyboard, Mouse, Headphones, HardDrive, Cpu, User, Heart, Package, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -89,13 +89,14 @@ export function MobileNav() {
 
           <Separator />
 
-          {/* All Products */}
+          {/* Tienda */}
           <Link
             href="/products"
             onClick={() => setOpen(false)}
-            className="flex items-center justify-center rounded-lg bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Ver Todos los Productos
+            <Store className="h-4 w-4" />
+            Ir a la Tienda
           </Link>
         </div>
       </SheetContent>

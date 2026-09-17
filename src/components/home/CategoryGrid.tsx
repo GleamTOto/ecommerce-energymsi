@@ -21,7 +21,7 @@ import {
 import { useProductsStore } from "@/stores/products-store"
 import { Skeleton } from "@/components/ui/skeleton"
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
   Baterias: Battery,
   "Baterias Para UPS": BatteryCharging,
   "Baterias Para Bascula": Scale,
@@ -39,7 +39,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Package: Package,
 }
 
-const getCategoryIcon = (categoryName: string, iconKey: string) => {
+const getCategoryIcon = (categoryName: string, iconKey: string): React.ComponentType<{ className?: string; style?: React.CSSProperties }> => {
   return iconMap[categoryName] || iconMap[iconKey] || Package
 }
 
