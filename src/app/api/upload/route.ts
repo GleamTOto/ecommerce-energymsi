@@ -4,7 +4,10 @@ import { join } from "path"
 import { existsSync } from "fs"
 import { cloudinary } from "@/lib/cloudinary"
 
-// Usar Cloudinary si está configurado, sino usar upload local
+// Detectar si estamos en producción (Vercel u otros entornos serverless)
+const isProduction = process.env.NODE_ENV === "production" || !!process.env.VERCEL
+
+// Cloudinary es obligatorio en producción (el filesystem es de solo lectura)
 const useCloudinary = !!(
   process.env.CLOUDINARY_CLOUD_NAME &&
   process.env.CLOUDINARY_API_KEY &&
@@ -13,6 +16,15 @@ const useCloudinary = !!(
 
 export async function POST(request: NextRequest) {
   try {
+    // En producción, Cloudinary es obligatorio (el filesystem es de solo lectura)
+    if (isProduction && !useCloudinary) {
+      console.error("Cloudinary not configured in production")
+      return NextResponse.json(
+        { error: "Servicio de imágenes no configurado. Contacta al administrador." },
+        { status: 503 }
+      )
+    }
+
     const formData = await request.formData()
     const file = formData.get("file") as File | null
 
@@ -112,6 +124,15 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    // En producción, Cloudinary es obligatorio
+    if (isProduction && !useCloudinary) {
+      console.error("Cloudinary not configured in production")
+      return NextResponse.json(
+        { error: "Servicio de imágenes no configurado. Contacta al administrador." },
+        { status: 503 }
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const publicId = searchParams.get("publicId")
 

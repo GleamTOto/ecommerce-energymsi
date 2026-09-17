@@ -30,7 +30,7 @@ export function AdminSidebar() {
       {/* Logo */}
       <div className="flex h-16 items-center gap-2 border-b px-6">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-          <span className="text-sm font-bold text-primary-foreground">EM</span>
+          <span className="text-sm font-bold text-primary-foreground">MSI</span>
         </div>
         <span className="font-bold">Admin Panel</span>
       </div>

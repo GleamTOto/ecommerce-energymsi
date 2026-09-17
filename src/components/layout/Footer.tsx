@@ -49,7 +49,7 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <span className="text-sm font-bold text-primary-foreground">
-                  EM
+                  MSI
                 </span>
               </div>
               <span className="text-xl font-bold">EnergyMSI</span>
