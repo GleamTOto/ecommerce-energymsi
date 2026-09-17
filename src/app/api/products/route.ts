@@ -54,28 +54,21 @@ export async function GET(request: NextRequest) {
     }
 
     // Build orderBy
-    let orderBy: Record<string, string> | Record<string, string>[] = { createdAt: "desc" }
+    let orderBy: Record<string, string> = { createdAt: "desc" }
     
-    // If featured=true and no specific sortBy, use random order
-    if (featured === "true" && sortBy === "newest") {
-      // For random ordering, we'll fetch all and shuffle in memory
-      // This is acceptable for small datasets (featured products)
-      orderBy = { createdAt: "desc" } // We'll shuffle after fetching
-    } else {
-      switch (sortBy) {
-        case "price-asc":
-          orderBy = { price: "asc" }
-          break
-        case "price-desc":
-          orderBy = { price: "desc" }
-          break
-        case "newest":
-          orderBy = { createdAt: "desc" }
-          break
-        case "popular":
-          orderBy = { stock: "desc" } // Placeholder - would use sales count
-          break
-      }
+    switch (sortBy) {
+      case "price-asc":
+        orderBy = { price: "asc" }
+        break
+      case "price-desc":
+        orderBy = { price: "desc" }
+        break
+      case "newest":
+        orderBy = { createdAt: "desc" }
+        break
+      case "popular":
+        orderBy = { stock: "desc" } // Placeholder - would use sales count
+        break
     }
 
     let products = await prisma.product.findMany({
@@ -85,22 +78,30 @@ export async function GET(request: NextRequest) {
         category: true,
         supplier: true,
       },
-      take: featured === "true" && sortBy === "newest" ? undefined : (limit ? Number(limit) : undefined),
+      take: limit ? Number(limit) : undefined,
       skip: offset ? Number(offset) : undefined,
     })
 
-    // Shuffle products if featured and no specific sort
-    if (featured === "true" && sortBy === "newest") {
+    // Shuffle products if featured to show random selection
+    if (featured === "true") {
       products = products.sort(() => Math.random() - 0.5)
-      if (limit) {
-        products = products.slice(0, Number(limit))
-      }
     }
 
     const total = await prisma.product.count({ where })
 
+    const transformedProducts = products.map(transformProduct)
+    
+    // Debug logging for featured products
+    if (featured === "true") {
+      console.log(`[API] Featured products query:`, {
+        where,
+        totalFound: transformedProducts.length,
+        productsWithImages: transformedProducts.filter(p => p.images && p.images.length > 0).length,
+      })
+    }
+
     return NextResponse.json({
-      products: products.map(transformProduct),
+      products: transformedProducts,
       total,
       limit: limit ? Number(limit) : null,
       offset: offset ? Number(offset) : 0,
