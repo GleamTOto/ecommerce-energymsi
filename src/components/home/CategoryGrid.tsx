@@ -21,7 +21,7 @@ import {
 import { useProductsStore } from "@/stores/products-store"
 import { Skeleton } from "@/components/ui/skeleton"
 
-const iconMap: Record<string, React.ComponentType<{ className?: string; style?: React.CSSProperties }>> = {
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Baterias: Battery,
   "Baterias Para UPS": BatteryCharging,
   "Baterias Para Bascula": Scale,
@@ -39,7 +39,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string; style?: 
   Package: Package,
 }
 
-const getCategoryIcon = (categoryName: string, iconKey: string): React.ComponentType<{ className?: string; style?: React.CSSProperties }> => {
+const getCategoryIcon = (categoryName: string, iconKey: string): React.ComponentType<{ className?: string }> => {
   return iconMap[categoryName] || iconMap[iconKey] || Package
 }
 
@@ -76,10 +76,11 @@ export function CategoryGrid() {
                         backgroundColor: `${category.color}15`,
                       }}
                     >
-                      <Icon
-                        className="h-7 w-7 transition-all duration-300 group-hover:scale-110"
-                        style={{ color: category.color }}
-                      />
+                      <span style={{ color: category.color }}>
+                        <Icon
+                          className="h-7 w-7 transition-all duration-300 group-hover:scale-110"
+                        />
+                      </span>
                     </div>
 
                     {/* Category Name */}
