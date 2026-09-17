@@ -107,7 +107,7 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
           {value.map((image, index) => (
             <div
-              key={image.publicId}
+              key={image.publicId ? `${image.publicId}-${index}` : `image-${index}`}
               className="group relative aspect-square overflow-hidden rounded-lg border bg-muted"
             >
               <Image
