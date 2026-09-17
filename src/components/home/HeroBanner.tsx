@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Autoplay from "embla-carousel-autoplay"
-import { Package, Zap } from "lucide-react"
+import { Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Carousel,
@@ -16,20 +16,80 @@ import { ProductImage } from "@/components/products/ProductImage"
 import { formatCOP } from "@/lib/format-currency"
 import type { Product } from "@/types"
 
-interface HeroBannerProps {
-  products: Product[]
-}
-
 const gradients = [
   "from-violet-900 via-purple-900 to-slate-900",
   "from-blue-900 via-cyan-900 to-slate-900",
   "from-emerald-900 via-teal-900 to-slate-900",
 ]
 
-export function HeroBanner({ products }: HeroBannerProps) {
+function shuffle<T>(items: T[]) {
+  return [...items].sort(() => Math.random() - 0.5)
+}
+
+async function fetchProducts(url: string, signal: AbortSignal) {
+  const response = await fetch(url, { signal })
+  if (!response.ok) {
+    throw new Error(`Product request failed with status ${response.status}`)
+  }
+
+  const data: { products?: Product[] } = await response.json()
+  return data.products ?? []
+}
+
+export function HeroBanner() {
+  const [products, setProducts] = React.useState<Product[]>([])
+  const [isLoading, setIsLoading] = React.useState(true)
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: true })
   )
+
+  React.useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadProducts() {
+      try {
+        const selected: Product[] = []
+        const selectedIds = new Set<string>()
+        const sources = [
+          "/api/products?featured=true&limit=10",
+          "/api/products?new=true&limit=10",
+          "/api/products?limit=10",
+        ]
+
+        for (const source of sources) {
+          let candidates: Product[]
+
+          try {
+            candidates = shuffle(await fetchProducts(source, controller.signal))
+          } catch (error) {
+            if (controller.signal.aborted) throw error
+            console.error(`[HeroBanner] Failed to load ${source}:`, error)
+            continue
+          }
+
+          for (const product of candidates) {
+            if (!selectedIds.has(product.id)) {
+              selected.push(product)
+              selectedIds.add(product.id)
+            }
+          }
+          if (selected.length >= 3) break
+        }
+
+        setProducts(shuffle(selected).slice(0, 3))
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("[HeroBanner] Error fetching products:", error)
+          setProducts([])
+        }
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false)
+      }
+    }
+
+    void loadProducts()
+    return () => controller.abort()
+  }, [])
 
   // Take first 3 products or pad with empty slides
   const slides = products.slice(0, 3).map((product, index) => ({
@@ -37,6 +97,16 @@ export function HeroBanner({ products }: HeroBannerProps) {
     product,
     gradient: gradients[index % gradients.length],
   }))
+
+  if (isLoading) {
+    return (
+      <section className="relative min-h-[420px] animate-pulse bg-slate-900" aria-label="Loading products">
+        <div className="container mx-auto flex min-h-[420px] items-center justify-center px-4">
+          <div className="h-8 w-48 rounded bg-white/10" />
+        </div>
+      </section>
+    )
+  }
 
   if (slides.length === 0) {
     return null
