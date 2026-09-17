@@ -2,7 +2,6 @@ import { HeroBanner } from "@/components/home/HeroBanner"
 import { CategoryGrid } from "@/components/home/CategoryGrid"
 import { FeaturedProducts } from "@/components/home/FeaturedProducts"
 import { SupplierSection } from "@/components/home/SupplierSection"
-import { featuredProductsWithImages } from "@/data/mock-featured"
 
 async function getFeaturedProducts() {
   try {
@@ -13,13 +12,12 @@ async function getFeaturedProducts() {
       `${baseUrl}/api/products?featured=true&limit=3`,
       { cache: "no-store" }
     )
-    if (!res.ok) return featuredProductsWithImages
+    if (!res.ok) return []
     const data = await res.json()
     const products = data.products || data || []
-    // Fallback to mock if API returns empty
-    return products.length > 0 ? products : featuredProductsWithImages
+    return products
   } catch {
-    return featuredProductsWithImages
+    return []
   }
 }
 
