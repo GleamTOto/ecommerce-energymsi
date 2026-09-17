@@ -3,7 +3,7 @@
 import { Truck } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { CartItem } from "@/types"
-import { StripeCheckoutButton } from "./StripeCheckoutButton"
+import { WhatsAppCheckoutButton } from "./WhatsAppCheckoutButton"
 import { formatCOP } from "@/lib/format-currency"
 
 interface CartSummaryProps {
@@ -50,11 +50,11 @@ export function CartSummary({ items }: CartSummaryProps) {
       </div>
 
       <div className="mt-6">
-        <StripeCheckoutButton />
+        <WhatsAppCheckoutButton />
       </div>
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
-        Pago seguro con Stripe. Impuestos incluidos.
+        Pedido via WhatsApp. Te contactaremos para confirmar.
       </p>
     </div>
   )

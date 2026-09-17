@@ -1,20 +1,16 @@
 "use client"
 
-import { Suspense, useEffect } from "react"
+import { useEffect } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import { CheckCircle, Package, ArrowRight, Loader2 } from "lucide-react"
+import { CheckCircle, MessageCircle, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useCartStore } from "@/stores/cart-store"
 
-function SuccessContent() {
-  const searchParams = useSearchParams()
-  const sessionId = searchParams.get("session_id")
+export default function CheckoutSuccessPage() {
   const clearCart = useCartStore((state) => state.clearCart)
 
   useEffect(() => {
-    // Clear cart after successful payment
     clearCart()
   }, [clearCart])
 
@@ -25,16 +21,16 @@ function SuccessContent() {
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <CheckCircle className="h-10 w-10 text-green-600" />
           </div>
-          <CardTitle className="text-2xl">Pago exitoso</CardTitle>
+          <CardTitle className="text-2xl">Pedido enviado</CardTitle>
           <CardDescription>
-            Tu pedido ha sido procesado correctamente
+            Te contactaremos por WhatsApp para confirmar tu pedido.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="rounded-lg bg-muted p-4">
             <div className="flex items-center justify-center gap-2 text-sm">
-              <Package className="h-4 w-4" />
-              <span>Recibiras un email con los detalles de tu pedido</span>
+              <MessageCircle className="h-4 w-4" />
+              <span>Recibiras una respuesta por WhatsApp pronto</span>
             </div>
           </div>
 
@@ -51,34 +47,8 @@ function SuccessContent() {
               </Link>
             </Button>
           </div>
-
-          {sessionId && (
-            <p className="text-xs text-muted-foreground">
-              ID de transaccion: {sessionId.slice(0, 20)}...
-            </p>
-          )}
         </CardContent>
       </Card>
     </div>
-  )
-}
-
-function SuccessSkeleton() {
-  return (
-    <div className="container max-w-lg py-12">
-      <Card className="text-center">
-        <CardContent className="py-12">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-muted-foreground" />
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
-
-export default function CheckoutSuccessPage() {
-  return (
-    <Suspense fallback={<SuccessSkeleton />}>
-      <SuccessContent />
-    </Suspense>
   )
 }

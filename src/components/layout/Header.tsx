@@ -24,7 +24,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ThemeToggle } from "./ThemeToggle";
 import { MobileNav } from "./MobileNav";
 import { useCartStore } from "@/stores/cart-store";
 
@@ -79,8 +78,6 @@ export function Header() {
                 PRODUCTOS
               </Button>
             </Link>
-
-            <ThemeToggle />
 
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <Heart className="h-4 w-4" />

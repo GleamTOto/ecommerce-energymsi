@@ -20,7 +20,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ThemeToggle } from "@/components/layout/ThemeToggle"
 import { AdminMobileNav } from "./AdminMobileNav"
 
 export function AdminHeader() {
@@ -45,8 +44,6 @@ export function AdminHeader() {
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        <ThemeToggle />
-
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4" />
           <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] text-destructive-foreground">

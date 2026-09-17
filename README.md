@@ -145,6 +145,39 @@ src/
 └── types/               # Tipos TypeScript
 ```
 
+## Re-enable Stripe (Restore Payment Gateway)
+
+The current checkout uses WhatsApp as a temporary payment channel. To restore Stripe:
+
+1. Uncomment Stripe env vars in `.env`:
+   ```bash
+   STRIPE_SECRET_KEY=sk_test_...
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+   ```
+
+2. Restore `StripeCheckoutButton` import in `src/components/cart/CartSummary.tsx`:
+   ```tsx
+   import { StripeCheckoutButton } from "./StripeCheckoutButton"
+   ```
+   And replace `<WhatsAppCheckoutButton />` with `<StripeCheckoutButton />`.
+
+3. Restore the deleted files from git history:
+   ```bash
+   git revert <commit-hash>
+   ```
+   Or manually restore:
+   - `src/components/cart/StripeCheckoutButton.tsx`
+   - `src/app/(shop)/checkout/page.tsx`
+   - `src/app/(shop)/checkout/cancel/page.tsx`
+   - `src/components/checkout/PaymentForm.tsx`
+
+4. Remove `src/components/cart/WhatsAppCheckoutButton.tsx` and `src/lib/whatsapp-message.ts`.
+
+5. Restore footer text in `CartSummary.tsx` to:
+   ```
+   Pago seguro con Stripe. Impuestos incluidos.
+   ```
+
 ## Documentación
 
 - [PRD](./docs/PRD.md) - Documento de requisitos del producto

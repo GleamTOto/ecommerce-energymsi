@@ -2,6 +2,7 @@ export interface User {
   id: string
   name: string
   email: string
+  password?: string
   avatar?: string
   role: "admin" | "customer"
   status: "active" | "inactive" | "suspended"
@@ -111,6 +112,17 @@ export const users: User[] = [
     createdAt: "2024-03-15",
     orders: 2,
     totalSpent: 560.25,
+  },
+  {
+    id: "9",
+    name: "Admin User",
+    email: "admin123@gmail.com",
+    password: "admin",
+    role: "admin",
+    status: "active",
+    createdAt: "2024-09-16",
+    orders: 0,
+    totalSpent: 0,
   },
 ]
 

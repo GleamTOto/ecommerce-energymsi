@@ -86,7 +86,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
       {/* Stock */}
       <p className="text-sm">
         {product.stock > 0 ? (
-          <span className="text-green-600 dark:text-green-400">
+          <span className="text-green-600">
             {product.stock} unidades disponibles
           </span>
         ) : (
