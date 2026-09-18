@@ -9,6 +9,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { WHATSAPP_DISPLAY_PHONE } from "@/lib/whatsapp-message";
 
 const footerLinks = {
   productos: [
@@ -153,7 +154,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 shrink-0" />
-                <span>+57 311 431 6782</span>
+                 <span>{WHATSAPP_DISPLAY_PHONE}</span>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 shrink-0" />

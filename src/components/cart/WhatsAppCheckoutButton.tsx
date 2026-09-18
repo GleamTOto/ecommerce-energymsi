@@ -6,7 +6,11 @@ import { MessageSquare, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/stores/cart-store"
-import { buildWhatsAppMessage, buildWhatsAppURL } from "@/lib/whatsapp-message"
+import {
+  buildWhatsAppMessage,
+  buildWhatsAppURL,
+  WHATSAPP_PHONE,
+} from "@/lib/whatsapp-message"
 
 const PHONE_REGEX = /^\d{10,15}$/
 
@@ -24,15 +28,14 @@ export function WhatsAppCheckoutButton() {
       return
     }
 
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? ""
-    if (!PHONE_REGEX.test(phone)) {
+    if (!PHONE_REGEX.test(WHATSAPP_PHONE)) {
       toast.error("WhatsApp no configurado")
       return
     }
 
     const message = buildWhatsAppMessage(items)
     clearCart()
-    window.open(buildWhatsAppURL(phone, message), "_blank")
+    window.open(buildWhatsAppURL(WHATSAPP_PHONE, message), "_blank")
   }
 
   return (

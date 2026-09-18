@@ -3,6 +3,10 @@ import { formatCOP } from "@/lib/format-currency"
 
 const MAX_ITEMS = 20
 
+// Canonical business WhatsApp number, matching the number shown in the footer.
+export const WHATSAPP_PHONE = "573114316782"
+export const WHATSAPP_DISPLAY_PHONE = "+57 311 431 6782"
+
 /**
  * Build a formatted WhatsApp message from cart items.
  * Format: one line per product "{name} x{qty} — {price_cop}",
