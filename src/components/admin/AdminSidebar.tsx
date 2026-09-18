@@ -3,26 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  Package,
-  CreditCard,
-  Users,
-  Settings,
-  ChevronLeft,
   Store,
-  Image,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
-const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Productos", href: "/admin/products", icon: Package },
-  { name: "HeroBanner", href: "/admin/hero-banner", icon: Image },
-  { name: "Pagos", href: "/admin/payments", icon: CreditCard },
-  { name: "Usuarios", href: "/admin/users", icon: Users },
-  { name: "Configuracion", href: "/admin/settings", icon: Settings },
-];
+import { adminNavigation } from "./admin-navigation";
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -39,7 +24,7 @@ export function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-4">
-        {navigation.map((item) => {
+        {adminNavigation.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link
