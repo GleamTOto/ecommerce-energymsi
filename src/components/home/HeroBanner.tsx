@@ -22,12 +22,8 @@ const gradients = [
   "from-emerald-900 via-teal-900 to-slate-900",
 ]
 
-function shuffle<T>(items: T[]) {
-  return [...items].sort(() => Math.random() - 0.5)
-}
-
-async function fetchProducts(url: string, signal: AbortSignal) {
-  const response = await fetch(url, { signal })
+async function fetchProducts(signal: AbortSignal) {
+  const response = await fetch("/api/hero-banner", { signal })
   if (!response.ok) {
     throw new Error(`Product request failed with status ${response.status}`)
   }
@@ -48,35 +44,7 @@ export function HeroBanner() {
 
     async function loadProducts() {
       try {
-        const selected: Product[] = []
-        const selectedIds = new Set<string>()
-        const sources = [
-          "/api/products?featured=true&limit=10",
-          "/api/products?new=true&limit=10",
-          "/api/products?limit=10",
-        ]
-
-        for (const source of sources) {
-          let candidates: Product[]
-
-          try {
-            candidates = shuffle(await fetchProducts(source, controller.signal))
-          } catch (error) {
-            if (controller.signal.aborted) throw error
-            console.error(`[HeroBanner] Failed to load ${source}:`, error)
-            continue
-          }
-
-          for (const product of candidates) {
-            if (!selectedIds.has(product.id)) {
-              selected.push(product)
-              selectedIds.add(product.id)
-            }
-          }
-          if (selected.length >= 3) break
-        }
-
-        setProducts(shuffle(selected).slice(0, 3))
+        setProducts((await fetchProducts(controller.signal)).slice(0, 3))
       } catch (error) {
         if (!controller.signal.aborted) {
           console.error("[HeroBanner] Error fetching products:", error)
