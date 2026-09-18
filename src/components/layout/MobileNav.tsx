@@ -2,7 +2,20 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, Monitor, Keyboard, Mouse, Headphones, HardDrive, Cpu, User, Heart, Package, Store } from "lucide-react"
+import {
+  Menu,
+  User,
+  Heart,
+  Package,
+  Store,
+  Settings,
+  Monitor,
+  Keyboard,
+  Mouse,
+  Headphones,
+  HardDrive,
+  Cpu,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -12,19 +25,28 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+import { useProductsStore } from "@/stores/products-store"
 
-const categories = [
-  { name: "Computadoras", href: "/products?category=computadoras", icon: Monitor },
-  { name: "Monitores", href: "/products?category=monitores", icon: Monitor },
-  { name: "Teclados", href: "/products?category=teclados", icon: Keyboard },
-  { name: "Mouse", href: "/products?category=mouse", icon: Mouse },
-  { name: "Audifonos", href: "/products?category=audifonos", icon: Headphones },
-  { name: "Almacenamiento", href: "/products?category=almacenamiento", icon: HardDrive },
-  { name: "Componentes", href: "/products?category=componentes", icon: Cpu },
-]
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Monitor,
+  Keyboard,
+  Mouse,
+  Headphones,
+  HardDrive,
+  Cpu,
+  Package,
+}
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false)
+  const { categories, fetchCategories } = useProductsStore()
+
+  React.useEffect(() => {
+    if (categories.length === 0) {
+      fetchCategories()
+    }
+  }, [categories.length, fetchCategories])
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -42,7 +64,7 @@ export function MobileNav() {
           {/* User Actions */}
           <div className="flex flex-col gap-2">
             <Link
-              href="/account"
+              href="/profile"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
             >
@@ -50,7 +72,7 @@ export function MobileNav() {
               Mi Cuenta
             </Link>
             <Link
-              href="/favorites"
+              href="/profile/favorites"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
             >
@@ -58,7 +80,7 @@ export function MobileNav() {
               Favoritos
             </Link>
             <Link
-              href="/orders"
+              href="/profile/orders"
               onClick={() => setOpen(false)}
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
             >
@@ -74,20 +96,37 @@ export function MobileNav() {
             <p className="px-3 text-xs font-semibold uppercase text-muted-foreground">
               Categorias
             </p>
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                href={category.href}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
-              >
-                <category.icon className="h-4 w-4" />
-                {category.name}
-              </Link>
-            ))}
+            {categories.length === 0
+              ? Array.from({ length: 5 }).map((_, index) => (
+                  <Skeleton key={index} className="mx-3 h-9 rounded-lg" />
+                ))
+              : categories.map((category) => {
+                  const Icon = iconMap[category.icon] || Package
+
+                  return (
+                    <Link
+                      key={category.id}
+                      href={`/products?category=${category.slug}`}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+                    >
+                      <Icon className="h-4 w-4" />
+                      {category.name}
+                    </Link>
+                  )
+                })}
           </div>
 
           <Separator />
+
+          <Link
+            href="/profile/settings"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"
+          >
+            <Settings className="h-4 w-4" />
+            Configuración
+          </Link>
 
           {/* Tienda */}
           <Link
