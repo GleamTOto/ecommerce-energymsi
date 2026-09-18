@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import {
   ShoppingCart,
@@ -31,6 +32,7 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   const itemCount = useCartStore((state) => state.getItemCount());
   const { data: session, status } = useSession();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -143,6 +145,10 @@ export function Header() {
                 TIENDA
               </Button>
             </Link>
+            <nav aria-label="Servicios" className="hidden items-center gap-1 lg:flex">
+              <Link href="/servicio-tecnico-ups" aria-current={pathname === "/servicio-tecnico-ups" ? "page" : undefined} className="rounded-md px-2 py-2 text-xs font-semibold hover:bg-accent">Servicio UPS</Link>
+              <Link href="/soluciones-solares" aria-current={pathname === "/soluciones-solares" ? "page" : undefined} className="rounded-md px-2 py-2 text-xs font-semibold hover:bg-accent">Soluciones solares</Link>
+            </nav>
 
             <Button variant="ghost" size="icon" className="h-9 w-9">
               <Heart className="h-4 w-4" />

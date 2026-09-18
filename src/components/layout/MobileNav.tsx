@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   Menu,
   User,
@@ -9,6 +10,8 @@ import {
   Package,
   Store,
   Settings,
+  Zap,
+  Sun,
   Monitor,
   Keyboard,
   Mouse,
@@ -40,6 +43,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false)
+  const pathname = usePathname()
   const { categories, fetchCategories } = useProductsStore()
 
   React.useEffect(() => {
@@ -88,6 +92,14 @@ export function MobileNav() {
               Mis Pedidos
             </Link>
           </div>
+
+          <Separator />
+
+          <nav aria-label="Servicios" className="flex flex-col gap-1">
+            <p className="px-3 text-xs font-semibold uppercase text-muted-foreground">Servicios</p>
+            <Link href="/servicio-tecnico-ups" aria-current={pathname === "/servicio-tecnico-ups" ? "page" : undefined} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"><Zap className="h-4 w-4" />Servicio técnico UPS</Link>
+            <Link href="/soluciones-solares" aria-current={pathname === "/soluciones-solares" ? "page" : undefined} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent"><Sun className="h-4 w-4" />Soluciones solares</Link>
+          </nav>
 
           <Separator />
 
