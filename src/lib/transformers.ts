@@ -36,6 +36,7 @@ export function transformProduct(product: ProductWithRelations): Product {
     images: Array.isArray(product.images) && product.images.length > 0 ? product.images : undefined,
     description: product.description || "",
     specs: (product.specs as Record<string, string>) || {},
+    warranty: product.warranty || undefined,
     stock: product.stock,
     isNew: product.isNew,
     isFeatured: product.isFeatured,

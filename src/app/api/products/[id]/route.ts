@@ -93,6 +93,7 @@ export async function PUT(
         stock: body.stock ?? 0,
         images: body.images || [],
         specs: body.specs || {},
+        warranty: body.warranty || null,
         isNew: body.isNew ?? false,
         isFeatured: body.isFeatured ?? false,
         isActive: body.isActive ?? true,

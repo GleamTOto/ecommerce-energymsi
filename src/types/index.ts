@@ -15,6 +15,7 @@ export interface Product {
   status: ProductStatus
   images?: string[]
   specs: Record<string, string>
+  warranty?: string
   stock: number
   isNew: boolean
   isFeatured: boolean

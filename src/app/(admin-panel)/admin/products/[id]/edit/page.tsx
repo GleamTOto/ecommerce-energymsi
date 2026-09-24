@@ -57,6 +57,7 @@ export default function EditProductPage() {
           isFeatured: data.isFeatured,
           specs: data.specs || {},
           images: data.images,
+          warranty: data.warranty,
         }
 
         setProduct(initialData)

@@ -110,6 +110,7 @@ model Product {
   stock        Int           @default(0)
   images       String[]
   specs        Json?
+  warranty     String?
   isNew        Boolean       @default(false)
   isFeatured   Boolean       @default(false)
   isActive     Boolean       @default(true)

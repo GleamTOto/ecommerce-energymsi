@@ -96,14 +96,6 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
       <Separator />
 
-      {/* Description */}
-      <div>
-        <h3 className="font-semibold mb-2">Descripcion</h3>
-        <p className="text-sm text-muted-foreground">{product.description}</p>
-      </div>
-
-      <Separator />
-
       {/* Quantity & Add to Cart */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* Quantity Selector */}
@@ -176,13 +168,15 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <p className="text-xs text-muted-foreground">30 dias para devolver</p>
           </div>
         </div>
-        <div className="flex items-center gap-3 text-sm">
-          <ShieldCheck className="h-5 w-5 text-muted-foreground" />
-          <div>
-            <p className="font-medium">Garantia</p>
-            <p className="text-xs text-muted-foreground">1 ano de garantia</p>
+        {product.warranty && (
+          <div className="flex items-center gap-3 text-sm">
+            <ShieldCheck className="h-5 w-5 text-muted-foreground" />
+            <div>
+              <p className="font-medium">Garantia</p>
+              <p className="text-xs text-muted-foreground">{product.warranty}</p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Specs */}

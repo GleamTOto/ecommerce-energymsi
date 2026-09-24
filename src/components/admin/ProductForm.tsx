@@ -41,6 +41,7 @@ export const productFormSchema = z.object({
   isNew: z.boolean(),
   isFeatured: z.boolean(),
   specs: z.record(z.string(), z.string()),
+  warranty: z.string().optional(),
 })
 
 export type ProductFormData = z.infer<typeof productFormSchema>
@@ -71,6 +72,7 @@ export interface ProductFormInitialData {
   isFeatured: boolean
   specs: Record<string, string>
   images?: string[]
+  warranty?: string | null
 }
 
 interface CategoryOption {
@@ -146,6 +148,7 @@ export function ProductForm({
           isNew: initialData.isNew,
           isFeatured: initialData.isFeatured,
           specs: initialData.specs,
+          warranty: initialData.warranty ?? undefined,
         }
       : {
           isNew: false,
@@ -157,6 +160,7 @@ export function ProductForm({
           minStock: 0,
           status: "ACTIVE" as const,
           specs: {},
+          warranty: undefined,
         },
   })
 
@@ -299,6 +303,15 @@ export function ProductForm({
             {errors.description && (
               <p className="text-sm text-destructive">{errors.description.message}</p>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="warranty">Garantia (opcional)</Label>
+            <Input
+              id="warranty"
+              placeholder="Ej: 1 ano, 6 meses"
+              {...register("warranty")}
+            />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

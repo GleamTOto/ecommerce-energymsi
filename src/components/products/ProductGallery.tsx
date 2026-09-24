@@ -7,9 +7,10 @@ import { ProductImage } from "@/components/products/ProductImage"
 interface ProductGalleryProps {
   images: string[]
   productName: string
+  description?: string
 }
 
-export function ProductGallery({ images, productName }: ProductGalleryProps) {
+export function ProductGallery({ images, productName, description }: ProductGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const currentImage = images[selectedIndex]
@@ -49,6 +50,23 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               />
             </button>
           ))}
+        </div>
+      )}
+
+      {/* Description */}
+      {description && (
+        <div className="mt-4">
+          <h3 className="font-semibold mb-2">Descripcion</h3>
+          <div className="text-sm text-muted-foreground space-y-3">
+            {description
+              .split("\n\n")
+              .filter((paragraph) => paragraph.trim())
+              .map((paragraph, index) => (
+                <p key={index} className="whitespace-pre-line">
+                  {paragraph}
+                </p>
+              ))}
+          </div>
         </div>
       )}
     </div>

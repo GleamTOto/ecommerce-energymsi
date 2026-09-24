@@ -140,7 +140,11 @@ export default function ProductPage({ params }: ProductPageProps) {
 
       {/* Product Content */}
       <div className="grid gap-8 lg:grid-cols-2">
-        <ProductGallery images={product.images || []} productName={product.name} />
+        <ProductGallery 
+          images={product.images || []} 
+          productName={product.name}
+          description={product.description || undefined}
+        />
         <ProductDetail product={product} />
       </div>
 

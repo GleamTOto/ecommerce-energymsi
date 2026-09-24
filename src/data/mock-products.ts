@@ -207,7 +207,8 @@ export const products: Product[] = [
     "rating": 0,
     "supplier": "Netion",
     "category": "baterias",
-    "specs": {}
+    "specs": {},
+    "warranty": "1 ano de garantia"
   },
   {
     "id": "2",
@@ -287,7 +288,8 @@ export const products: Product[] = [
     "rating": 0,
     "supplier": "Netion",
     "category": "baterias-para-ups",
-    "specs": {}
+    "specs": {},
+    "warranty": "6 meses de garantia"
   },
   {
     "id": "6",
@@ -347,7 +349,8 @@ export const products: Product[] = [
     "rating": 0,
     "supplier": "Netion",
     "category": "baterias-para-ups",
-    "specs": {}
+    "specs": {},
+    "warranty": "2 anos de garantia"
   },
   {
     "id": "9",
