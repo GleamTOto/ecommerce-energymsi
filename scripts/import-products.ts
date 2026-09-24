@@ -170,7 +170,7 @@ const supplierColors: Record<string, string> = {
   MovilTronics: "#DC2626",
   Truper: "#EA580C",
   Unitec: "#7C3AED",
-  Importronic: "#0891B2",
+  "Uni-t": "#0891B2",
   Otros: "#6B7280",
   EvoBike: "#DB2777",
 }

@@ -59,6 +59,12 @@ export function HeroBanner() {
     return () => controller.abort()
   }, [])
 
+  // Force carousel re-initialization when products change
+  const carouselKey = React.useMemo(
+    () => products.map((p) => p.id).join("-"),
+    [products]
+  )
+
   // Take first 3 products or pad with empty slides
   const slides = products.slice(0, 3).map((product, index) => ({
     id: product.id,
@@ -83,6 +89,7 @@ export function HeroBanner() {
   return (
     <section className="relative">
       <Carousel
+        key={carouselKey}
         plugins={[plugin.current]}
         className="w-full"
         opts={{
@@ -118,7 +125,7 @@ export function HeroBanner() {
                           {slide.product.name}
                           <span className="block text-primary">{formatCOP(slide.product.price)}</span>
                         </h2>
-                        <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-md mx-auto lg:mx-0">
+                        <p className="mt-3 text-sm sm:text-base text-slate-300 max-w-md mx-auto lg:mx-0 line-clamp-2">
                           {slide.product.description || `Producto de la categoría ${slide.product.category}`}
                         </p>
                         <div className="mt-5 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">

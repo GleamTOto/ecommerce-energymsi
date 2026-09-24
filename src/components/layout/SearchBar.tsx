@@ -5,18 +5,19 @@ import Link from "next/link"
 import Image from "next/image"
 import { Search, X, Clock, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { useProductsStore } from "@/stores/products-store"
-import type { Product } from "@/types"
 
 const SEARCH_HISTORY_KEY = "ecommerce-search-history"
 const MAX_HISTORY_ITEMS = 10
 
-// Normalize text: lowercase + remove accents
-function normalizeText(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+// Autocomplete result shape from /api/products/autocomplete
+interface AutocompleteResult {
+  id: string
+  name: string
+  slug: string
+  price: number
+  images: string[]
+  category: string
+  stock: number
 }
 
 // localStorage helpers
@@ -58,25 +59,19 @@ function clearSearchHistory(): void {
 export function SearchBar({ mobile = false }: { mobile?: boolean }) {
   const [query, setQuery] = useState("")
   const [isOpen, setIsOpen] = useState(false)
-  const [results, setResults] = useState<Product[]>([])
+  const [results, setResults] = useState<AutocompleteResult[]>([])
   const [history, setHistory] = useState<string[]>([])
   const [showHistory, setShowHistory] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const { products, fetchProducts } = useProductsStore()
-
-  // Load products on mount
-  useEffect(() => {
-    if (products.length === 0) {
-      fetchProducts()
-    }
-  }, [products.length, fetchProducts])
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Load search history on mount
   useEffect(() => {
     setHistory(getSearchHistory())
   }, [])
 
-  // Search logic - accent/case insensitive
+  // Server-side autocomplete with debounce + AbortController
   useEffect(() => {
     if (!query.trim()) {
       setResults([])
@@ -84,25 +79,36 @@ export function SearchBar({ mobile = false }: { mobile?: boolean }) {
       return
     }
 
-    const normalizedQuery = normalizeText(query)
-    const filtered = products.filter((product) => {
-      const normalizedName = normalizeText(product.name)
-      const normalizedDesc = normalizeText(product.description)
-      const normalizedSku = normalizeText(product.sku || "")
-      const normalizedCategory = normalizeText(product.category)
+    // Cancel previous request
+    abortControllerRef.current?.abort()
 
-      return (
-        normalizedName.includes(normalizedQuery) ||
-        normalizedDesc.includes(normalizedQuery) ||
-        normalizedSku.includes(normalizedQuery) ||
-        normalizedCategory.includes(normalizedQuery)
-      )
-    })
+    // Debounce 300ms
+    debounceTimerRef.current = setTimeout(async () => {
+      const controller = new AbortController()
+      abortControllerRef.current = controller
 
-    setResults(filtered.slice(0, 8))
-    setIsOpen(true)
-    setShowHistory(false)
-  }, [query, products])
+      try {
+        const res = await fetch(
+          `/api/products/autocomplete?q=${encodeURIComponent(query)}`,
+          { signal: controller.signal }
+        )
+        if (!res.ok) throw new Error("Autocomplete failed")
+        const data: AutocompleteResult[] = await res.json()
+        setResults(data)
+        setIsOpen(true)
+        setShowHistory(false)
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return
+        setResults([]) // graceful: empty dropdown on error
+      }
+    }, 300)
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+      }
+    }
+  }, [query])
 
   // Close dropdown on outside click
   useEffect(() => {

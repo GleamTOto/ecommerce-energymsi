@@ -146,8 +146,8 @@ export const suppliers: Supplier[] = [
   },
   {
     "id": "3",
-    "name": "Importronic",
-    "slug": "importronic",
+    "name": "Uni-t",
+    "slug": "uni-t",
     "color": "#0891B2",
     "productCount": 21
   },
@@ -1385,7 +1385,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1405,7 +1405,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1425,7 +1425,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1445,7 +1445,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1465,7 +1465,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1485,7 +1485,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1505,7 +1505,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1525,7 +1525,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1545,7 +1545,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1565,7 +1565,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1585,7 +1585,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1605,7 +1605,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1625,7 +1625,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1645,7 +1645,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "equipos-de-soldadura",
     "specs": {}
   },
@@ -1665,7 +1665,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1705,7 +1705,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1725,7 +1725,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1745,7 +1745,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1765,7 +1765,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },
@@ -1925,7 +1925,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "cargadores",
     "specs": {}
   },
@@ -2085,7 +2085,7 @@ export const products: Product[] = [
     "isNew": false,
     "isFeatured": false,
     "rating": 0,
-    "supplier": "Importronic",
+    "supplier": "Uni-t",
     "category": "multimetros",
     "specs": {}
   },

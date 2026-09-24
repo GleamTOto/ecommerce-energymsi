@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { transformProduct } from "@/lib/transformers"
+import { searchProducts } from "@/lib/search"
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
 
-    // Query params
-    const category = searchParams.get("category")
-    const supplier = searchParams.get("supplier")
+    // Query params — multi-select via getAll()
+    const categories = searchParams.getAll("category")
+    const suppliers = searchParams.getAll("supplier")
     const minPrice = searchParams.get("minPrice")
     const maxPrice = searchParams.get("maxPrice")
     const sortBy = searchParams.get("sortBy") || "newest"
@@ -16,19 +17,67 @@ export async function GET(request: NextRequest) {
     const isNew = searchParams.get("new")
     const limit = searchParams.get("limit")
     const offset = searchParams.get("offset")
-    const search = searchParams.get("search")
+    const search = searchParams.get("search")?.slice(0, 200) || null
 
+    // When search is present, delegate to the search service (weighted scoring)
+    if (search) {
+      const result = await searchProducts({
+        search,
+        categories: categories.length > 0 ? categories : undefined,
+        suppliers: suppliers.length > 0 ? suppliers : undefined,
+        minPrice: minPrice ? Number(minPrice) : undefined,
+        maxPrice: maxPrice ? Number(maxPrice) : undefined,
+        featured: featured === "true" ? true : undefined,
+        isNew: isNew === "true" ? true : undefined,
+        sortBy,
+        limit: limit ? Number(limit) : undefined,
+        offset: offset ? Number(offset) : undefined,
+      })
+
+      // Transform search results to match the existing Product type
+      const transformedProducts = result.products.map((p) => ({
+        id: p.id,
+        name: p.name,
+        slug: p.slug,
+        sku: p.sku || undefined,
+        supplier: p.supplierName || "Sin proveedor",
+        category: p.categorySlug,
+        price: Number(p.price),
+        comparePrice: undefined,
+        cost: 0,
+        margin: 0,
+        unit: "UNIDAD",
+        minStock: 0,
+        status: "ACTIVE" as const,
+        images: Array.isArray(p.images) && p.images.length > 0 ? p.images : undefined,
+        description: p.description || "",
+        specs: {},
+        stock: p.stock,
+        isNew: p.isNew,
+        isFeatured: p.isFeatured,
+        rating: 4.5,
+      }))
+
+      return NextResponse.json({
+        products: transformedProducts,
+        total: result.total,
+        limit: limit ? Number(limit) : null,
+        offset: offset ? Number(offset) : 0,
+      })
+    }
+
+    // Existing Prisma path for non-search queries (backward compat)
     // Build where clause
     const where: Record<string, unknown> = {
       isActive: true,
     }
 
-    if (category) {
-      where.category = { slug: category }
+    if (categories.length > 0) {
+      where.category = { slug: { in: categories } }
     }
 
-    if (supplier) {
-      where.supplier = { slug: supplier }
+    if (suppliers.length > 0) {
+      where.supplier = { slug: { in: suppliers } }
     }
 
     if (minPrice || maxPrice) {
@@ -43,14 +92,6 @@ export async function GET(request: NextRequest) {
 
     if (isNew === "true") {
       where.isNew = true
-    }
-
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-        { sku: { contains: search, mode: "insensitive" } },
-      ]
     }
 
     // Build orderBy

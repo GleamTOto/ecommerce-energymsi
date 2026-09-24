@@ -24,6 +24,7 @@ const defaultFilters: FilterState = {
   suppliers: [],
   priceRange: [0, 5000000],
   sortBy: "newest",
+  search: "",
 }
 
 export const useProductsStore = create<ProductsState>((set, get) => ({
@@ -41,12 +42,10 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       const filters = { ...get().filters, ...filterOverrides }
       const params = new URLSearchParams()
 
-      if (filters.categories.length === 1) {
-        params.set("category", filters.categories[0])
-      }
-      if (filters.suppliers.length === 1) {
-        params.set("supplier", filters.suppliers[0])
-      }
+      // Multi-select: send all selected values (not just when length === 1)
+      filters.categories.forEach((c) => params.append("category", c))
+      filters.suppliers.forEach((s) => params.append("supplier", s))
+
       if (filters.priceRange[0] > 0) {
         params.set("minPrice", filters.priceRange[0].toString())
       }
@@ -55,6 +54,9 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
       }
       if (filters.sortBy) {
         params.set("sortBy", filters.sortBy)
+      }
+      if (filters.search) {
+        params.set("search", filters.search)
       }
 
       const response = await fetch(`/api/products?${params.toString()}`)

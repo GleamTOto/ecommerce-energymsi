@@ -27,6 +27,7 @@ function ProductsContent() {
   useEffect(() => {
     const category = searchParams.get("category")
     const featured = searchParams.get("featured")
+    const search = searchParams.get("search")
 
     const initialFilters: Partial<FilterState> = {}
     if (category) {
@@ -34,6 +35,9 @@ function ProductsContent() {
     }
     if (featured === "true") {
       // This will be handled in the API call
+    }
+    if (search) {
+      initialFilters.search = search
     }
 
     if (Object.keys(initialFilters).length > 0) {
@@ -76,7 +80,9 @@ function ProductsContent() {
       {/* Results count and controls */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Todos los Productos</h1>
+          <h1 className="text-2xl font-bold">
+            {filters.search ? `Resultados para "${filters.search}"` : "Todos los Productos"}
+          </h1>
           <p className="text-sm text-muted-foreground">
             {loading ? "Cargando..." : `${products.length} productos encontrados`}
           </p>

@@ -52,4 +52,5 @@ export interface FilterState {
   suppliers: string[]
   priceRange: [number, number]
   sortBy: 'popular' | 'price-asc' | 'price-desc' | 'newest' | 'rating'
+  search: string
 }

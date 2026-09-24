@@ -130,6 +130,10 @@ model Product {
   @@index([slug])
   @@index([sku])
   @@map("products")
+  // External indexes (managed by migration, not Prisma DSL):
+  // - idx_products_name_trgm: GIN trigram on f_unaccent(name)
+  // - idx_products_description_trgm: GIN trigram on f_unaccent(description)
+  // - idx_products_sku_trgm: GIN trigram on f_unaccent(sku)
 }
 
 model HeroBannerItem {
