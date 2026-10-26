@@ -28,22 +28,32 @@ export function SupplierSection() {
             ? Array.from({ length: 6 }).map((_, i) => (
                 <Skeleton key={i} className="h-10 w-32 rounded-lg" />
               ))
-            : suppliers.map((supplier) => (
-                <div
-                  key={supplier.id}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                >
-                  {supplier.color && (
-                    <span
-                      className="inline-block h-3 w-3 rounded-full"
-                      style={{ backgroundColor: supplier.color }}
-                    />
-                  )}
-                  <span className="text-lg font-semibold text-muted-foreground hover:text-foreground transition-colors">
-                    {supplier.name}
-                  </span>
-                </div>
-              ))}
+             : (
+                 <>
+                   {suppliers.map((supplier) => (
+                     <div
+                       key={supplier.id}
+                       className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                     >
+                       {supplier.color && (
+                         <span
+                           className="inline-block h-3 w-3 rounded-full"
+                           style={{ backgroundColor: supplier.color }}
+                         />
+                       )}
+                       <span className="text-lg font-semibold text-muted-foreground hover:text-foreground transition-colors">
+                         {supplier.name === "Importronic" ? "Uni-T" : supplier.name}
+                       </span>
+                     </div>
+                   ))}
+                   <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                     <span className="inline-block h-3 w-3 rounded-full bg-slate-500" />
+                     <span className="text-lg font-semibold text-muted-foreground hover:text-foreground transition-colors">
+                       Powest
+                     </span>
+                   </div>
+                 </>
+               )}
         </div>
       </div>
     </section>

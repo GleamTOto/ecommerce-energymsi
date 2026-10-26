@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
+import { HERO_BANNER_MAX_SLIDES } from "@/lib/constants"
 import { prisma } from "@/lib/prisma"
 import { transformProduct } from "@/lib/transformers"
 
@@ -27,7 +28,8 @@ export async function GET() {
     })
     const featuredProducts = await getFeaturedProducts()
     const selectedIds = new Set(configuredItems.map((item) => item.productId))
-    const selected = configuredItems.map((item) => transformProduct(item.product))
+    const selectedItems = configuredItems.slice(0, HERO_BANNER_MAX_SLIDES)
+    const selected = selectedItems.map((item) => transformProduct(item.product))
     const fallbackFeatured = shuffle(
       featuredProducts.filter((product) => !selectedIds.has(product.id))
     )
@@ -45,8 +47,8 @@ export async function GET() {
         !selectedIds.has(product.id) && products.findIndex((candidate) => candidate.id === product.id) === index
     )
     return NextResponse.json({
-      products: [...selected, ...fallback.slice(0, Math.max(0, 3 - selected.length))],
-      selected: configuredItems.map((item) => transformProduct(item.product)),
+      products: [...selected, ...fallback.slice(0, Math.max(0, HERO_BANNER_MAX_SLIDES - selected.length))].slice(0, HERO_BANNER_MAX_SLIDES),
+      selected,
       available: featuredProducts.map(transformProduct),
     })
   } catch (error) {
@@ -69,6 +71,12 @@ export async function PUT(request: NextRequest) {
     }
 
     const uniqueIds = [...new Set(productIds)]
+    if (uniqueIds.length > HERO_BANNER_MAX_SLIDES) {
+      return NextResponse.json(
+        { error: `A maximum of ${HERO_BANNER_MAX_SLIDES} products can be displayed` },
+        { status: 400 }
+      )
+    }
     const eligibleCount = await prisma.product.count({
       where: {
         id: { in: uniqueIds },

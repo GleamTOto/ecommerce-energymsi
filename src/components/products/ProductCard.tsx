@@ -19,7 +19,9 @@ export function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem)
   const [added, setAdded] = useState(false)
 
-  const hasDiscount = product.comparePrice && product.comparePrice > product.price
+  const hasDiscount = Boolean(
+    product.comparePrice && product.comparePrice > product.price,
+  )
   const discountPercent = hasDiscount
     ? Math.round(((product.comparePrice! - product.price) / product.comparePrice!) * 100)
     : 0
@@ -114,11 +116,11 @@ export function ProductCard({ product }: ProductCardProps) {
           <span className="text-lg font-bold text-primary">
             {formatCOP(product.price)}
           </span>
-          {hasDiscount && (
+          {/* {hasDiscount && (
             <span className="text-sm text-muted-foreground line-through">
               {formatCOP(product.comparePrice!)}
             </span>
-          )}
+          )} */}
         </div>
 
         {/* Stock */}

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ProductImage } from "@/components/products/ProductImage"
+import { HERO_BANNER_MAX_SLIDES } from "@/lib/constants"
 
 interface HeroProduct {
   id: string
@@ -58,6 +59,10 @@ export default function HeroBannerAdminPage() {
   }, [])
 
   const addProduct = (product: HeroProduct) => {
+    if (selected.length >= HERO_BANNER_MAX_SLIDES) {
+      toast.error(`El HeroBanner admite un máximo de ${HERO_BANNER_MAX_SLIDES} productos`)
+      return
+    }
     setSelected((current) => [...current, product])
   }
 
@@ -110,8 +115,8 @@ export default function HeroBannerAdminPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Seleccionados ({selected.length})</CardTitle>
-          <CardDescription>El orden guardado se muestra primero en el HeroBanner. Usa los controles accesibles para reordenar.</CardDescription>
+          <CardTitle>Seleccionados ({selected.length}/{HERO_BANNER_MAX_SLIDES})</CardTitle>
+          <CardDescription>El orden guardado se muestra primero en el HeroBanner. Puedes seleccionar hasta {HERO_BANNER_MAX_SLIDES} productos y usar los controles accesibles para reordenar.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {selected.length === 0 && <p className="text-sm text-muted-foreground">No hay productos configurados. Se usara el fallback de productos destacados.</p>}
@@ -135,7 +140,7 @@ export default function HeroBannerAdminPage() {
         <CardContent className="space-y-3">
           {available.map((product) => (
             <ProductRow key={product.id} product={product} controls={
-              <Button variant="outline" size="sm" disabled={selectedIds.has(product.id)} onClick={() => addProduct(product)}>
+              <Button variant="outline" size="sm" disabled={selectedIds.has(product.id) || selected.length >= HERO_BANNER_MAX_SLIDES} onClick={() => addProduct(product)}>
                 {selectedIds.has(product.id) ? "Seleccionado" : "Agregar"}
               </Button>
             } />

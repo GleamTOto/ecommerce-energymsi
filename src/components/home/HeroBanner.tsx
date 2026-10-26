@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/carousel"
 import { ProductImage } from "@/components/products/ProductImage"
 import { formatCOP } from "@/lib/format-currency"
+import { HERO_BANNER_MAX_SLIDES } from "@/lib/constants"
 import type { Product } from "@/types"
 
 const gradients = [
@@ -44,7 +45,7 @@ export function HeroBanner() {
 
     async function loadProducts() {
       try {
-        setProducts((await fetchProducts(controller.signal)).slice(0, 3))
+        setProducts(await fetchProducts(controller.signal))
       } catch (error) {
         if (!controller.signal.aborted) {
           console.error("[HeroBanner] Error fetching products:", error)
@@ -65,8 +66,7 @@ export function HeroBanner() {
     [products]
   )
 
-  // Take first 3 products or pad with empty slides
-  const slides = products.slice(0, 3).map((product, index) => ({
+  const slides = products.slice(0, HERO_BANNER_MAX_SLIDES).map((product, index) => ({
     id: product.id,
     product,
     gradient: gradients[index % gradients.length],
