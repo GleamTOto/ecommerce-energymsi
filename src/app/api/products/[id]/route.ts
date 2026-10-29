@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { transformProduct } from "@/lib/transformers"
+import { isAdmin } from "@/lib/auth"
 
 type Params = Promise<{ id: string }>
 
@@ -50,6 +51,10 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Params }
 ) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+  }
+
   try {
     const { id } = await params
     const body = await request.json()
@@ -137,6 +142,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Params }
 ) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
+  }
+
   try {
     const { id } = await params
 

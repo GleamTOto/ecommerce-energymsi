@@ -2,8 +2,7 @@
 
 import { useState, useCallback } from "react"
 import Image from "next/image"
-import { Upload, X, Loader2, ImagePlus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { X, Loader2, ImagePlus } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface UploadedImage {
@@ -20,6 +19,7 @@ interface ImageUploadProps {
 export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false)
   const [dragActive, setDragActive] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleUpload = useCallback(
     async (files: FileList | null) => {
@@ -30,6 +30,7 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
 
       const filesToUpload = Array.from(files).slice(0, remainingSlots)
       setUploading(true)
+      setError(null)
 
       try {
         const uploadPromises = filesToUpload.map(async (file) => {
@@ -42,17 +43,46 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
           })
 
           if (!response.ok) {
-            const error = await response.json()
-            throw new Error(error.error || "Error al subir imagen")
+            const errorBody = await response.json().catch(() => null)
+            throw new Error(errorBody?.error || "Error al subir imagen")
           }
 
-          return response.json()
+          const result = await response.json()
+          if (
+            !result ||
+            typeof result.url !== "string" ||
+            typeof result.publicId !== "string"
+          ) {
+            throw new Error("La respuesta de upload no tiene el formato esperado")
+          }
+
+          return result as UploadedImage
         })
 
-        const results = await Promise.all(uploadPromises)
-        onChange([...value, ...results])
+        const results = await Promise.allSettled(uploadPromises)
+        const successfulUploads = results
+          .filter(
+            (result): result is PromiseFulfilledResult<UploadedImage> =>
+              result.status === "fulfilled"
+          )
+          .map((result) => result.value)
+        const failedUpload = results.find(
+          (result): result is PromiseRejectedResult => result.status === "rejected"
+        )
+
+        if (successfulUploads.length > 0) {
+          onChange([...value, ...successfulUploads])
+        }
+        if (failedUpload) {
+          setError(
+            failedUpload.reason instanceof Error
+              ? failedUpload.reason.message
+              : "Error al subir una o más imágenes"
+          )
+        }
       } catch (error) {
         console.error("Error uploading images:", error)
+        setError(error instanceof Error ? error.message : "Error al subir imágenes")
       } finally {
         setUploading(false)
       }
@@ -63,14 +93,27 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
   const handleRemove = useCallback(
     async (index: number) => {
       const imageToRemove = value[index]
+      if (!imageToRemove) return
 
-      // Eliminar de Cloudinary
-      try {
-        await fetch(`/api/upload?publicId=${encodeURIComponent(imageToRemove.publicId)}`, {
-          method: "DELETE",
-        })
-      } catch (error) {
-        console.error("Error deleting image from Cloudinary:", error)
+      setError(null)
+
+      // Existing images do not carry an R2 key. They may be legacy Cloudinary
+      // images, so never send their URL or legacy ID to the R2 delete route.
+      if (imageToRemove.publicId && /^products\/[A-Za-z0-9._-]+$/.test(imageToRemove.publicId)) {
+        try {
+          const response = await fetch(
+            `/api/upload?publicId=${encodeURIComponent(imageToRemove.publicId)}`,
+            { method: "DELETE" }
+          )
+          if (!response.ok) {
+            const errorBody = await response.json().catch(() => null)
+            throw new Error(errorBody?.error || "Error al eliminar imagen")
+          }
+        } catch (error) {
+          console.error("Error deleting image from R2:", error)
+          setError(error instanceof Error ? error.message : "Error al eliminar imagen")
+          return
+        }
       }
 
       // Actualizar estado local
@@ -132,6 +175,8 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
           ))}
         </div>
       )}
+
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       {/* Área de upload */}
       {value.length < maxImages && (

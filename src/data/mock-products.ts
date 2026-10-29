@@ -138,6 +138,13 @@ export const suppliers: Supplier[] = [
     "productCount": 3
   },
   {
+    "id": "9",
+    "name": "Austar",
+    "slug": "austar",
+    "color": "#0F766E",
+    "productCount": 0
+  },
+  {
     "id": "2",
     "name": "Green Point",
     "slug": "green-point",
@@ -185,6 +192,13 @@ export const suppliers: Supplier[] = [
     "slug": "unitec",
     "color": "#7C3AED",
     "productCount": 1
+  },
+  {
+    "id": "10",
+    "name": "Powest",
+    "slug": "powest",
+    "color": "#9333EA",
+    "productCount": 0
   }
 ]
 

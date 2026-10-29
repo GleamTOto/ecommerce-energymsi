@@ -28,11 +28,11 @@ export function SupplierFilter({ selectedSuppliers, onSuppliersChange }: Supplie
     supplier.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const handleSupplierToggle = (supplierName: string) => {
-    if (selectedSuppliers.includes(supplierName)) {
-      onSuppliersChange(selectedSuppliers.filter((b) => b !== supplierName))
+  const handleSupplierToggle = (supplierSlug: string) => {
+    if (selectedSuppliers.includes(supplierSlug)) {
+      onSuppliersChange(selectedSuppliers.filter((slug) => slug !== supplierSlug))
     } else {
-      onSuppliersChange([...selectedSuppliers, supplierName])
+      onSuppliersChange([...selectedSuppliers, supplierSlug])
     }
   }
 
@@ -73,8 +73,8 @@ export function SupplierFilter({ selectedSuppliers, onSuppliersChange }: Supplie
                 <div key={supplier.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={`supplier-${supplier.id}`}
-                    checked={selectedSuppliers.includes(supplier.name)}
-                    onCheckedChange={() => handleSupplierToggle(supplier.name)}
+                    checked={selectedSuppliers.includes(supplier.slug)}
+                    onCheckedChange={() => handleSupplierToggle(supplier.slug)}
                   />
                   <Label
                     htmlFor={`supplier-${supplier.id}`}
