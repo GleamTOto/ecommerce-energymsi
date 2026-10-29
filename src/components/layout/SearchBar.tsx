@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Search, X, Clock, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { isRemoteImageSource } from "@/lib/image"
 
 const SEARCH_HISTORY_KEY = "ecommerce-search-history"
 const MAX_HISTORY_ITEMS = 10
@@ -245,6 +246,7 @@ export function SearchBar({ mobile = false }: { mobile?: boolean }) {
                     fill
                     className="object-contain"
                     sizes="48px"
+                    unoptimized={isRemoteImageSource(product.images[0])}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">

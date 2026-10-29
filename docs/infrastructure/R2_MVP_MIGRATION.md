@@ -33,6 +33,10 @@ R2_PUBLIC_URL=
 | Compatibility | `Product.images` and existing Cloudinary URLs are unchanged. Next Image keeps Cloudinary and adds the configured R2 hostname. |
 | Dependencies | `@aws-sdk/client-s3` and the retained `cloudinary` package for legacy fallback/rollback; no presigned URL dependency is needed for server-side multipart uploads. |
 
+### Image optimization quota
+
+Product image components bypass `/_next/image` for absolute HTTP(S) image URLs, including the current `r2.dev` host and a future R2 custom domain. This avoids consuming Vercel Image Optimization quota for remote product images. The tradeoff is that these images are not resized by Vercel; local service images under `/services/...` remain optimized normally.
+
 ## Migration utility
 
 ### Product image inventory
@@ -67,7 +71,7 @@ The pre-migration inventory found 131 references, 131 unique URLs, no duplicates
 - Post-migration inventory: **passed**; all 131 references now resolve to the configured R2 host.
 - `npm install`: run during implementation; result is recorded with the delivery verification.
 - `npm run lint` and `npm run build`: run during implementation; pre-existing failures are reported separately if present.
-- HTTP 402: the audit found no application code returning 402. A prior 402 may be upstream Cloudinary billing/quota/delivery behavior, but its cause is unconfirmed.
+- HTTP 402: the audit found no application code returning 402. The confirmed `OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED` response is from Vercel Image Optimization quota; localized remote-image bypasses avoid that optimizer path.
 
 ## Deployment, rollback, and cost
 

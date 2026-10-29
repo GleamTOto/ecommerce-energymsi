@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Package } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+import { isRemoteImageSource } from "@/lib/image"
 
 interface ProductImageProps {
   src?: string
@@ -45,6 +46,7 @@ export function ProductImage({
       className={cn(fit === "contain" ? "object-contain" : "object-cover", className)}
       sizes={sizes}
       priority={priority}
+      unoptimized={isRemoteImageSource(src)}
       onError={() => setImgError(true)}
     />
   )

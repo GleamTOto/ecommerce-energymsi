@@ -4,6 +4,7 @@ import { useState, useCallback } from "react"
 import Image from "next/image"
 import { X, Loader2, ImagePlus } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { isRemoteImageSource } from "@/lib/image"
 
 interface UploadedImage {
   url: string
@@ -158,6 +159,7 @@ export function ImageUpload({ value = [], onChange, maxImages = 5 }: ImageUpload
                 alt={`Imagen ${index + 1}`}
                 fill
                 className="object-cover"
+                unoptimized={isRemoteImageSource(image.url)}
               />
               <button
                 type="button"
